@@ -1,0 +1,3732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+  />
+  <title>Sweet Cake Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --app-h:100vh;
+      --pink:#ffb7d6;
+      --pink-2:#ffd9ea;
+      --cream:#fff8ee;
+      --peach:#ffd8b2;
+      --mint:#dff7ee;
+      --sky:#e3f5ff;
+      --ink:#6a3557;
+      --brown:#8a4c2b;
+      --good:#1f7a2e;
+      --bad:#b42318;
+      --panel:rgba(255,252,248,.95);
+      --shadow:0 8px 22px rgba(122,53,93,.12);
+      --gold:#ffcf62;
+      --glow:0 0 0 5px rgba(255,255,255,.45), 0 0 24px rgba(255,188,214,.72);
+    }
+
+    *{box-sizing:border-box;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+    html,body{margin:0;height:100%;}
+    html,body,body *{
+      font-family:"Comic Neue","Comic Sans MS","Chalkboard SE","Marker Felt",cursive,sans-serif !important;
+    }
+
+    body{
+      min-height:100vh;
+      min-height:100svh;
+      min-height:var(--app-h);
+      background:
+        radial-gradient(circle at 18% 15%, rgba(255,255,255,.8) 0 6%, transparent 7%),
+        radial-gradient(circle at 82% 22%, rgba(255,255,255,.7) 0 5%, transparent 6%),
+        radial-gradient(circle at 72% 78%, rgba(255,255,255,.6) 0 4%, transparent 5%),
+        linear-gradient(180deg,#fff3f8 0%,#fffaf3 48%,#ffe7d0 100%);
+      color:var(--ink);
+      overflow:hidden;
+      touch-action:manipulation;
+    }
+
+    button,input{font:inherit;}
+
+    .cover{
+      min-height:var(--app-h);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+      background:
+        linear-gradient(rgba(255,246,251,.82),rgba(255,240,247,.86)),
+        linear-gradient(180deg,#ffd4ea 0%, #fff0f7 55%, #fff9f1 100%);
+    }
+    .cover.hidden{display:none;}
+    .cover-card{
+      width:min(100%,540px);
+      background:linear-gradient(180deg,#fffdfc,#fff4f8);
+      border:4px solid var(--brown);
+      border-radius:24px;
+      box-shadow:0 18px 40px rgba(0,0,0,.18);
+      padding:14px;
+      text-align:center;
+    }
+    .cover-hero{
+      min-height:180px;
+      border:4px solid var(--brown);
+      border-radius:20px;
+      margin-bottom:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:8px;
+      background:
+        radial-gradient(circle at 22% 22%, rgba(255,255,255,.72), rgba(255,255,255,0) 28%),
+        linear-gradient(180deg,#ffe8f4,#fff7c9 58%,#ffd8b9);
+    }
+    .hero-big{font-size:58px;line-height:1;}
+    .cover-title{
+      font-size:clamp(1.6rem,7vw,2rem);
+      font-weight:900;
+      color:#b03f75;
+      margin:0;
+    }
+    .cover-sub{
+      margin:4px 0 10px;
+      font-size:clamp(.92rem,3.8vw,1rem);
+      font-weight:900;
+    }
+    .cover-note{
+      background:#fffaf0;
+      border:3px solid var(--brown);
+      border-radius:16px;
+      padding:10px 12px;
+      font-size:13px;
+      font-weight:800;
+      line-height:1.34;
+      text-align:left;
+    }
+    .text-input{
+      width:100%;
+      margin-top:12px;
+      padding:12px 14px;
+      font-size:18px;
+      background:#fff;
+      border:3px solid var(--brown);
+      border-radius:14px;
+      color:#5f361d;
+    }
+    .cover-actions{
+      display:flex;
+      justify-content:center;
+      margin-top:12px;
+    }
+    .start-btn{
+      min-width:220px;
+      padding:10px 16px;
+      border:3px solid var(--brown);
+      border-radius:999px;
+      cursor:pointer;
+      background:linear-gradient(180deg,#fff2a8,#ffb9d8);
+      font-size:30px;
+      font-weight:900;
+      color:#6a3151;
+    }
+
+    .app{
+      height:var(--app-h);
+      max-height:var(--app-h);
+      width:min(100%,560px);
+      margin:0 auto;
+      padding:max(6px, env(safe-area-inset-top)) 8px max(6px, env(safe-area-inset-bottom));
+      display:none;
+      flex-direction:column;
+      gap:5px;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at top,rgba(255,255,255,.45),rgba(255,255,255,0) 28%),
+        linear-gradient(rgba(255,250,247,.62),rgba(255,240,248,.74)),
+        linear-gradient(180deg,#fff7ef,#ffdff0);
+    }
+    .app.show{display:flex;}
+
+    .topbar,.tickets-wrap,.progress-wrap,.frame,.feedback,.modal-card{
+      background:var(--panel);
+      border:3px solid var(--brown);
+      border-radius:16px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(2px);
+    }
+    .topbar{padding:6px;}
+    .top-row{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+    .title{font-size:clamp(1.02rem,4vw,1.22rem);font-weight:900;color:#ad4476;line-height:1;}
+    .subtitle{font-size:10px;font-weight:900;opacity:.88;margin-top:2px;}
+    .top-actions{display:flex;gap:6px;flex-wrap:wrap;}
+    .pill-btn{
+      border:2px solid var(--brown);
+      border-radius:999px;
+      background:#fff3df;
+      color:#6a3151;
+      font-size:15px;
+      font-weight:900;
+      padding:4px 8px;
+      cursor:pointer;
+    }
+    .status-grid{
+      margin-top:5px;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:3px;
+    }
+    .status-box{
+      background:#fff3df;
+      border:2px solid var(--brown);
+      border-radius:10px;
+      text-align:center;
+      padding:4px 2px;
+      font-size:8px;
+      font-weight:900;
+      line-height:1.05;
+    }
+    .status-box span{display:block;font-size:11px;margin-top:1px;}
+
+    .tickets-wrap,.progress-wrap{padding:5px 8px;}
+    .section-label{text-align:center;font-size:10px;font-weight:900;margin-bottom:3px;}
+    .tickets{
+      display:flex;
+      justify-content:center;
+      gap:4px;
+      flex-wrap:wrap;
+      min-height:24px;
+    }
+    .ticket{
+      width:22px;
+      height:22px;
+      border:2px solid var(--brown);
+      border-radius:7px;
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:10px;
+      font-weight:900;
+    }
+    .ticket.correct{background:#dff7df;color:var(--good);}
+    .ticket.wrong{background:#ffe1db;color:var(--bad);}
+    .progress-bar{
+      width:100%;
+      height:9px;
+      background:#fff3df;
+      border:2px solid var(--brown);
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .progress-fill{
+      width:0%;
+      height:100%;
+      background:linear-gradient(90deg,#ffd472,#ffa2cb,#8dd8ff);
+      transition:width .25s ease;
+    }
+
+    .story-nav{display:flex;gap:6px;}
+    .story-pill{
+      flex:1 1 0;
+      border:2px solid var(--brown);
+      border-radius:999px;
+      background:#fff7e8;
+      color:#6a3151;
+      font-size:16px;
+      font-weight:900;
+      padding:5px 4px;
+      text-align:center;
+    }
+    .story-pill.active{background:#dff7ff;}
+
+    .frame{
+      display:none;
+      flex:1 1 auto;
+      min-height:0;
+      padding:8px;
+      overflow:hidden;
+    }
+    .frame.active{display:flex;flex-direction:column;gap:8px;}
+    #frame2.active{gap:6px;}
+    .frame-title{
+      text-align:center;
+      font-size:14px;
+      font-weight:900;
+      color:#a04271;
+    }
+    .main-card{
+      width:100%;
+      background:#fff7fb;
+      border:3px solid var(--brown);
+      border-radius:14px;
+      padding:10px 8px;
+      text-align:center;
+    }
+    .dialogue{
+      font-size:11px;
+      font-weight:800;
+      line-height:1.24;
+      color:#8a4f18;
+    }
+    .help-line,.note{
+      font-size:11px;
+      font-weight:800;
+      line-height:1.24;
+    }
+    .note{
+      width:100%;
+      background:#fff3df;
+      border:2px dashed var(--brown);
+      border-radius:12px;
+      padding:8px;
+      text-align:center;
+    }
+    .equation-big{
+      font-size:clamp(1.45rem,6.6vw,1.9rem);
+      font-weight:900;
+      color:#c43e78;
+      line-height:1.08;
+      margin:6px 0 4px;
+    }
+    .equation-mini{
+      font-size:clamp(1.1rem,5vw,1.35rem);
+      font-weight:900;
+      color:#c43e78;
+      line-height:1.05;
+      margin:0;
+    }
+
+    .character-frame,.seller-frame{
+      width:100%;
+      max-width:230px;
+      height:140px;
+      margin:0 auto;
+      border:3px solid var(--brown);
+      border-radius:18px;
+      background:linear-gradient(180deg,#fffaf0,#ffe0f1);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      position:relative;
+    }
+    .seller-frame{max-width:240px;height:146px;}
+    .avatar-stack{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      gap:4px;
+      width:100%;
+      height:100%;
+      padding:8px 8px 6px;
+    }
+    .avatar-emoji{
+      width:112px;
+      height:88px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex:0 0 auto;
+      overflow:hidden;
+      line-height:1;
+      filter:drop-shadow(0 4px 0 rgba(138,76,43,.12));
+    }
+    .avatar-emoji img{
+      display:block;
+      max-width:100%;
+      max-height:100%;
+      width:auto;
+      height:auto;
+      object-fit:contain;
+    }
+    .avatar-badge{
+      max-width:92%;
+      background:#fff7e8;
+      border:2px solid var(--brown);
+      border-radius:999px;
+      padding:3px 8px;
+      font-size:10px;
+      font-weight:900;
+      color:#6a3151;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      flex:0 0 auto;
+    }
+
+    .mini-seller-wrap{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      border:2px solid var(--brown);
+      background:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      flex:0 0 auto;
+      font-size:22px;
+      line-height:1;
+    }
+    .mini-seller-wrap img{
+      display:block;
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+    .mini-seller-wrap.good{background:#e7f8ea;border-color:var(--good);}
+    .mini-seller-wrap.bad{background:#ffe6e0;border-color:var(--bad);}
+    .equation-face-row{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .play-stage{
+      width:100%;
+      flex:1 1 auto;
+      min-height:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(180deg,#fffaf5,#fff7fd);
+      border:3px solid #e3b6c7;
+      border-radius:18px;
+      padding:8px;
+      overflow:hidden;
+      position:relative;
+      transition:transform .22s ease, box-shadow .22s ease, background .22s ease;
+    }
+    .play-stage.good{
+      background:linear-gradient(180deg,#fff9db,#fff8ff);
+      box-shadow:var(--glow);
+    }
+    .play-stage.bad{
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,166,166,.28) 0 6%, transparent 7%),
+        radial-gradient(circle at 82% 24%, rgba(255,185,125,.25) 0 5%, transparent 6%),
+        linear-gradient(180deg,#fff6f4,#fff7fb);
+      animation:messyShake .36s ease;
+    }
+    .play-stage.hidden{display:none !important;}
+
+    @keyframes messyShake{
+      0%{transform:translateX(0) rotate(0deg);}
+      18%{transform:translateX(-3px) rotate(-1.2deg);}
+      36%{transform:translateX(4px) rotate(1deg);}
+      54%{transform:translateX(-2px) rotate(-.6deg);}
+      72%{transform:translateX(2px) rotate(.5deg);}
+      100%{transform:translateX(0) rotate(0deg);}
+    }
+
+    .sparkle{
+      position:absolute;
+      font-size:20px;
+      opacity:0;
+      animation:sparklePop .9s ease forwards;
+      pointer-events:none;
+    }
+    @keyframes sparklePop{
+      0%{transform:translateY(8px) scale(.2);opacity:0;}
+      25%{opacity:1;}
+      100%{transform:translateY(-18px) scale(1.1);opacity:0;}
+    }
+
+    .shape-grid{
+      width:100%;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      align-items:stretch;
+    }
+    .shape-card,.piece-card,.combo-card{
+      min-height:88px;
+      border:3px solid #e0bdd0;
+      background:linear-gradient(180deg,#fffdfb,#fff7f0);
+      border-radius:18px;
+      padding:8px 6px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .shape-card.selected,.piece-card.selected,.combo-card.selected{
+      border-color:#8ac8ff;
+      box-shadow:inset 0 0 0 3px #dff2ff;
+      transform:translateY(-2px);
+    }
+    .shape-name{
+      font-size:11px;
+      font-weight:900;
+      text-align:center;
+      color:#7d4066;
+    }
+
+    .grouping-panel{
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:center;
+      justify-content:center;
+    }
+    .grouping-caption{
+      font-size:11px;
+      font-weight:900;
+      line-height:1.2;
+      text-align:center;
+      color:#8a4f18;
+    }
+    .grouping-trays{
+      width:100%;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      align-items:stretch;
+    }
+    .grouping-tray{
+      background:linear-gradient(180deg,#fffdf8,#fff5e9);
+      border:3px solid #f1c8d6;
+      border-radius:28px;
+      padding:10px 8px;
+      min-height:182px;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      align-items:center;
+      justify-items:center;
+      gap:8px;
+    }
+    .grouping-tray-label{
+      grid-column:1 / -1;
+      font-size:10px;
+      font-weight:900;
+      color:#a5557d;
+      margin-bottom:2px;
+    }
+    .grouping-item{
+      width:74px;
+      height:74px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transform:rotate(var(--rot, 0deg)) scale(var(--scale,1));
+      transform-origin:center;
+    }
+    .grouping-svg{
+      width:74px;
+      height:74px;
+      overflow:visible;
+      display:block;
+    }
+
+    .count-figure-panel{
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:center;
+      justify-content:center;
+    }
+    .count-figure-caption{
+      font-size:11px;
+      font-weight:900;
+      line-height:1.2;
+      text-align:center;
+      color:#8a4f18;
+    }
+    .count-figure-board{
+      width:min(100%,280px);
+      height:220px;
+      position:relative;
+      border:3px solid #f1c8d6;
+      border-radius:28px;
+      background:linear-gradient(180deg,#fffdf8,#fff6ec);
+      overflow:hidden;
+    }
+    .count-figure-piece{
+      position:absolute;
+      width:86px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transform:translate(-50%,-50%) rotate(var(--rot, 0deg)) scale(var(--scale,1));
+      transform-origin:center;
+    }
+    .count-figure-piece.half{width:94px;}
+    .count-figure-piece.quarter{width:74px;}
+    .count-piece-svg{
+      width:100%;
+      height:auto;
+      display:block;
+    }
+    .count-piece-wrap{
+      width:100%;
+    }
+    .count-piece-wrap .cake-art-img,
+    .count-piece-wrap .cake-art-fallback{
+      max-width:100%;
+    }
+
+    .composite-panel{
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      align-items:center;
+      justify-content:center;
+    }
+    .composite-caption{
+      font-size:11px;
+      font-weight:900;
+      line-height:1.2;
+      text-align:center;
+      color:#8a4f18;
+    }
+    .composite-board{
+      width:min(100%,280px);
+      height:220px;
+      border:3px solid #f1c8d6;
+      border-radius:28px;
+      background:linear-gradient(180deg,#fffdf8,#fff5ea);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+    .composite-svg{
+      width:92%;
+      height:92%;
+      display:block;
+      overflow:visible;
+    }
+    .composite-fill{
+      fill:#ffb58a;
+      stroke:none;
+    }
+    .composite-line{
+      stroke:#b74f58;
+      stroke-width:3.2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+    }
+    .option-btn.correct-answer{
+      border-color:#2d9b4c;
+      box-shadow:inset 0 0 0 3px #cfeeda;
+      background:linear-gradient(180deg,#f5fff6,#e1f7e5);
+    }
+    .option-btn.wrong-answer{
+      border-color:#d14343;
+      box-shadow:inset 0 0 0 3px #ffd4d4;
+      background:linear-gradient(180deg,#fff9f9,#ffe9e9);
+    }
+
+    .option-btn.text-only{
+      min-height:54px;
+      padding:8px 8px;
+      gap:0;
+      justify-content:center;
+    }
+    .option-btn.text-only .label{
+      font-size:12px;
+    }
+
+    .cake-art-wrap,
+    .mini-cake-wrap,
+    .piece-cake-wrap,
+    .assembly-piece-wrap,
+    .cut-cake-wrap{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+    }
+    .cake-art-img{
+      display:block;
+      width:100%;
+      max-width:150px;
+      height:auto;
+      object-fit:contain;
+    }
+    .fallback-svg,
+    .mini-svg,
+    .cut-svg,
+    .object-svg{
+      display:block;
+      width:100%;
+      height:auto;
+    }
+    .cake-art-fallback{
+      display:none;
+      width:100%;
+      max-width:150px;
+      align-items:center;
+      justify-content:center;
+    }
+    .mini-cake-wrap .cake-art-img,
+    .piece-cake-wrap .cake-art-img{max-width:110px;}
+    .mini-cake-wrap .cake-art-fallback,
+    .piece-cake-wrap .cake-art-fallback{max-width:110px;}
+
+    .object-panel,.cut-panel,.piece-panel,.build-panel{
+      width:100%;
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+    .object-card{
+      width:min(100%,220px);
+      background:linear-gradient(180deg,#fffefb,#fff6ef);
+      border:3px solid var(--brown);
+      border-radius:18px;
+      padding:8px;
+      text-align:center;
+    }
+    .object-name,.object-hint,.cut-caption,.piece-caption,.build-caption,.equal-note,.assembly-note{
+      font-size:11px;
+      font-weight:900;
+      text-align:center;
+      line-height:1.2;
+      color:#8a4f18;
+    }
+    .piece-choices{
+      width:100%;
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+    }
+    .assembly-board{
+      width:min(100%,260px);
+      min-height:118px;
+      border:3px solid var(--brown);
+      border-radius:18px;
+      background:linear-gradient(180deg,#fffefb,#fff8ef);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px;
+    }
+    .assembly-board.good{
+      box-shadow:var(--glow);
+    }
+    .assembly-cake-wrap{
+      display:grid;
+      gap:6px;
+      width:100%;
+      justify-items:center;
+      align-items:center;
+    }
+    .assembly-cake-wrap.halves{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .assembly-cake-wrap.quarters{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .assembly-cake-wrap.single{
+      grid-template-columns:1fr;
+    }
+    .assembly-cake-wrap.three{
+      grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+    .assembly-gap{
+      width:74px;
+      height:56px;
+      border:2px dashed #d9b58a;
+      border-radius:12px;
+    }
+
+    .reasoning-panel{
+      display:none;
+      width:100%;
+      background:#eef9f0;
+      border:3px dashed var(--good);
+      border-radius:14px;
+      padding:8px 10px;
+      text-align:center;
+      font-weight:900;
+    }
+    .reasoning-panel.show{display:block;}
+    .reasoning-panel.bad{background:#fff1eb;border-color:var(--bad);color:#8f1e15;}
+    .reasoning-title{font-size:11px;margin-bottom:4px;}
+    .reasoning-line{font-size:clamp(1.02rem,4.2vw,1.18rem);line-height:1.18;}
+
+    .answer-panel{
+      width:100%;
+      background:rgba(255,250,243,.98);
+      border:2px solid var(--brown);
+      border-radius:16px;
+      box-shadow:0 6px 14px rgba(123,75,42,.12);
+      padding:6px;
+      display:grid;
+      grid-template-columns:84px 1fr;
+      gap:8px;
+      align-items:start;
+    }
+    .answer-panel.shape-mode{
+      padding:4px;
+      gap:4px;
+    }
+    .answer-panel.shape-mode .answer-area{gap:4px;}
+    .answer-panel.shape-mode .answer-grid{gap:6px;}
+    .answer-bubble{
+      width:68px;
+      height:68px;
+      border-radius:50%;
+      border:3px solid var(--brown);
+      background:linear-gradient(180deg,#fff5bf,#ffd1e6);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-size:16px;
+      font-weight:900;
+      color:#a04271;
+      margin:0 auto;
+      box-shadow:inset 0 -6px 0 rgba(255,255,255,.35);
+      line-height:1.05;
+      padding:4px;
+    }
+    .answer-mini{
+      font-size:10px;
+      font-weight:900;
+      text-align:center;
+      line-height:1.15;
+      margin-top:4px;
+    }
+    .served-line{
+      font-size:11px;
+      font-weight:900;
+      color:#a04271;
+      text-align:center;
+      min-height:16px;
+      margin-top:3px;
+      line-height:1.15;
+    }
+    .answer-area{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width:0;
+    }
+    .answer-grid{
+      width:100%;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:6px;
+    }
+    .option-btn{
+      width:100%;
+      min-height:52px;
+      padding:6px 6px;
+      border:3px solid var(--brown);
+      border-radius:14px;
+      background:linear-gradient(180deg,#fffefb,#fff3e7);
+      color:#6a3151;
+      cursor:pointer;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:4px;
+    }
+    .option-btn.active{
+      background:linear-gradient(180deg,#eafaff,#dff7ff);
+      box-shadow:inset 0 0 0 3px #8ac8ff;
+    }
+    .option-btn.shape-only{
+      min-height:78px;
+      padding:4px;
+      border-radius:14px;
+    }
+    .option-btn.shape-only .icon{
+      width:100%;
+      height:62px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .option-btn .label{
+      font-size:11px;
+      font-weight:900;
+      line-height:1.1;
+      text-align:center;
+    }
+
+    .controls{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:6px;
+    }
+    .game-btn{
+      min-width:72px;
+      padding:7px 7px;
+      border:3px solid var(--brown);
+      border-radius:999px;
+      background:#fff7e8;
+      font-size:16px;
+      font-weight:900;
+      color:#5f361d;
+      cursor:pointer;
+    }
+    .game-btn:disabled{opacity:.55;cursor:not-allowed;}
+    .btn-check{background:#dff7df;}
+    .btn-clear{background:#ffe6cc;}
+    .btn-next{background:#ece4ff;}
+    .btn-hint{background:#fff4c7;}
+
+    .speech{
+      width:100%;
+      background:#fff7fb;
+      border:3px solid var(--brown);
+      border-radius:16px;
+      padding:10px 8px;
+      text-align:center;
+      font-size:11px;
+      font-weight:900;
+      line-height:1.25;
+      min-height:88px;
+    }
+    .speech.good{background:#e7f8ea;border-color:var(--good);color:#1f5f29;}
+    .speech.bad{background:#ffe6e0;border-color:var(--bad);color:#8f1e15;}
+
+    .story-actions{display:flex;gap:8px;}
+    .story-actions .game-btn{flex:1 1 0;min-width:0;}
+
+    .feedback{
+      min-height:40px;
+      padding:8px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      font-size:11px;
+      font-weight:900;
+      line-height:1.2;
+    }
+    .feedback.good{color:var(--good);}
+    .feedback.bad{color:var(--bad);}
+    .footer{text-align:center;font-size:9px;font-weight:900;opacity:.8;padding-bottom:2px;}
+
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:14px;
+      background:rgba(70,40,20,.45);
+      z-index:100;
+    }
+    .modal.show{display:flex;}
+    .modal-card{
+      width:min(100%,520px);
+      max-height:88vh;
+      overflow:auto;
+      background:linear-gradient(180deg,#fffef9,#fff1dc);
+      padding:16px 14px;
+      text-align:center;
+    }
+    .modal-title{font-size:24px;font-weight:900;color:#b85b18;margin-bottom:8px;}
+    .modal-badge{
+      display:inline-block;
+      padding:10px 16px;
+      border-radius:999px;
+      border:3px solid var(--brown);
+      background:#fff9dd;
+      font-size:18px;
+      font-weight:900;
+      margin:8px 0 12px;
+    }
+    .modal-line{font-size:16px;font-weight:800;line-height:1.3;margin-bottom:10px;}
+    .report{
+      width:100%;
+      margin:0 auto 14px;
+      background:#fff8eb;
+      border:3px solid var(--brown);
+      border-radius:18px;
+      padding:12px 14px;
+      text-align:left;
+      font-size:15px;
+      font-weight:800;
+      line-height:1.4;
+    }
+    .modal-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+
+    .confetti-layer{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index:140;
+    }
+    .confetti-piece{
+      position:fixed;
+      top:-30px;
+      border-radius:3px;
+      opacity:.95;
+      animation:confettiFall linear forwards;
+    }
+    @keyframes confettiFall{
+      0%{transform:translateY(-30px) rotate(0deg);}
+      100%{transform:translateY(110vh) rotate(720deg);}
+    }
+
+    @media (max-width:430px){
+      .app{padding:max(4px, env(safe-area-inset-top)) 6px max(4px, env(safe-area-inset-bottom));gap:4px;}
+      .topbar,.tickets-wrap,.progress-wrap,.frame,.feedback,.modal-card{border-width:2px;border-radius:14px;}
+      .title{font-size:.92rem;}
+      .subtitle{font-size:8px;}
+      .pill-btn{font-size:12px;padding:4px 7px;}
+      .status-box{font-size:7px;padding:3px 1px;}
+      .status-box span{font-size:9px;}
+      .section-label{font-size:9px;}
+      .ticket{width:18px;height:18px;font-size:9px;}
+      .story-pill{font-size:13px;padding:5px 3px;}
+      .frame{padding:5px;}
+      .frame-title{font-size:11px;}
+      .main-card{padding:6px 5px;border-width:2px;}
+      .dialogue,.help-line,.note,.speech,.feedback,.reasoning-title,.equal-note{font-size:9px;}
+      .equation-big{font-size:1.35rem;}
+      .equation-mini{font-size:1.04rem;}
+      .reasoning-line{font-size:1rem;}
+      .character-frame{max-width:180px;height:104px;border-width:2px;}
+      .seller-frame{max-width:190px;height:110px;border-width:2px;}
+      .avatar-stack{padding:6px 6px 4px;gap:3px;}
+      .avatar-emoji{width:84px;height:62px;}
+      .avatar-badge{font-size:9px;padding:2px 7px;}
+      .play-stage{padding:6px;border-width:2px;}
+      .shape-card,.piece-card,.combo-card{padding:6px 4px;border-width:2px;border-radius:14px;}
+      .grouping-trays{gap:8px;}
+      .grouping-tray{min-height:150px;padding:8px 6px;border-width:2px;border-radius:22px;}
+      .grouping-item{width:60px;height:60px;}
+      .grouping-svg{width:60px;height:60px;}
+      .grouping-caption{font-size:9px;}
+      .count-figure-board{width:min(100%,246px);height:188px;border-width:2px;border-radius:22px;}
+      .count-figure-piece{width:72px;}
+      .count-figure-piece.half{width:78px;}
+      .count-figure-piece.quarter{width:62px;}
+      .count-figure-caption{font-size:9px;}
+      .composite-board{width:min(100%,246px);height:188px;border-width:2px;border-radius:22px;}
+      .composite-caption{font-size:9px;}
+      .answer-panel{grid-template-columns:72px 1fr;gap:5px;padding:4px;border-radius:12px;}
+      .answer-bubble{width:56px;height:56px;font-size:12px;border-width:2px;}
+      .controls{gap:4px;}
+      .game-btn{font-size:12px;padding:6px 4px;border-width:2px;}
+      .mini-seller-wrap{width:32px;height:32px;font-size:18px;}
+      .cover-card{padding:10px;}
+      .cover-hero{min-height:144px;}
+      .hero-big{font-size:50px;}
+      .cover-note{font-size:11px;padding:8px 10px;}
+      .text-input{padding:10px 12px;font-size:16px;}
+      .start-btn{min-width:180px;padding:10px 14px;font-size:22px;}
+
+      .answer-panel.shape-mode{
+        padding:3px;
+        gap:3px;
+      }
+      .answer-panel.shape-mode .answer-area{gap:3px;}
+      .answer-panel.shape-mode .answer-grid{gap:4px;}
+      .answer-panel.shape-mode .option-btn.shape-only{
+        min-height:66px;
+        padding:2px;
+        border-radius:12px;
+      }
+      .answer-panel.shape-mode .option-btn.shape-only .icon{height:56px;}
+      .answer-panel.shape-mode .controls{gap:3px;}
+      .answer-panel.shape-mode .game-btn{
+        padding:4px 3px;
+        font-size:10.5px;
+      }
+    }
+
+    @media (max-height:780px) and (pointer:coarse){
+      .app{gap:3px;padding:max(2px, env(safe-area-inset-top)) 5px max(2px, env(safe-area-inset-bottom));}
+      .title{font-size:.85rem;}
+      .subtitle{font-size:7px;}
+      .pill-btn{font-size:10px;padding:4px 6px;}
+      .status-box{font-size:7px;padding:2px 1px;}
+      .status-box span{font-size:8px;}
+      .ticket{width:16px;height:16px;font-size:8px;}
+      .story-pill{font-size:11px;padding:4px 2px;}
+      .frame{padding:4px;}
+      .main-card{padding:5px 4px;}
+      .dialogue,.help-line,.note,.speech,.feedback,.reasoning-title,.equal-note{font-size:8px;line-height:1.12;}
+      .equation-big{font-size:1.12rem;}
+      .equation-mini{font-size:.95rem;}
+      .reasoning-line{font-size:.95rem;}
+      .character-frame{max-width:155px;height:86px;}
+      .seller-frame{max-width:170px;height:92px;}
+      .avatar-stack{padding:5px 5px 3px;gap:2px;}
+      .avatar-emoji{width:70px;height:50px;}
+      .avatar-badge{font-size:8px;padding:2px 6px;}
+      .play-stage{padding:5px;}
+      .grouping-trays{gap:6px;}
+      .grouping-tray{min-height:134px;padding:6px 5px;border-radius:20px;}
+      .grouping-item{width:52px;height:52px;}
+      .grouping-svg{width:52px;height:52px;}
+      .grouping-caption{font-size:8px;line-height:1.1;}
+      .answer-panel{grid-template-columns:62px 1fr;gap:4px;padding:3px;}
+      .answer-bubble{width:50px;height:50px;font-size:11px;}
+      .option-btn{min-height:42px;padding:4px 5px;}
+      .option-btn .label{font-size:11px;}
+      .game-btn{font-size:10.5px;padding:5px 3px;}
+      .feedback{min-height:28px;padding:4px 5px;}
+
+      #frame2.active{gap:4px;}
+      .reasoning-panel{padding:4px 6px;}
+      .reasoning-title{font-size:7px;margin-bottom:1px;}
+      .reasoning-line{font-size:11px;line-height:1.05;}
+      .answer-panel.shape-mode{
+        padding:3px;
+        gap:3px;
+      }
+      .answer-panel.shape-mode .answer-area{gap:3px;}
+      .answer-panel.shape-mode .answer-grid{gap:4px;}
+      .answer-panel.shape-mode .option-btn.shape-only{
+        min-height:66px;
+        padding:2px;
+        border-radius:12px;
+      }
+      .answer-panel.shape-mode .option-btn.shape-only .icon{height:56px;}
+      .answer-panel.shape-mode .controls{gap:3px;}
+      .answer-panel.shape-mode .game-btn{
+        padding:4px 3px;
+        font-size:10.5px;
+      }
+    }
+/* ===== compact mobile layout patch ===== */
+
+.tickets-wrap{
+  display:none !important;
+}
+
+.topbar{
+  padding:4px 5px;
+}
+.top-row{
+  gap:6px;
+  align-items:flex-start;
+}
+.title{
+  font-size:clamp(.96rem,3.8vw,1.12rem);
+}
+.subtitle{
+  font-size:8px;
+}
+.top-actions{
+  gap:4px;
+  flex-wrap:nowrap;
+  flex:0 0 auto;
+}
+.pill-btn{
+  min-width:0;
+  width:40px;
+  height:34px;
+  padding:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+  line-height:1;
+}
+.status-grid{
+  gap:2px;
+  margin-top:4px;
+}
+.status-box{
+  padding:3px 1px;
+  font-size:7px;
+}
+.status-box span{
+  font-size:10px;
+}
+
+#frame2.active{
+  gap:4px;
+}
+#frame2 .main-card{
+  padding:6px 5px;
+}
+#frame2 .equation-mini{
+  font-size:clamp(1rem,4.6vw,1.18rem);
+}
+#frame2 .help-line{
+  font-size:8px;
+  line-height:1.05;
+}
+
+.answer-panel.shape-mode{
+  grid-template-columns:1fr;
+  padding:4px;
+  gap:4px;
+}
+.answer-panel.shape-mode > div:first-child{
+  display:none;
+}
+.answer-panel.shape-mode .answer-area{
+  gap:4px;
+}
+.answer-panel.shape-mode .answer-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:5px;
+}
+.answer-panel.shape-mode .option-btn.shape-only{
+  min-height:82px;
+  padding:3px;
+  border-radius:14px;
+}
+.answer-panel.shape-mode .option-btn.shape-only .icon{
+  height:68px;
+}
+.answer-panel.shape-mode .controls{
+  gap:4px;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+}
+.answer-panel.shape-mode .game-btn{
+  min-width:0;
+  font-size:10.5px;
+  padding:6px 2px;
+}
+.story-actions .game-btn{
+  padding:6px 4px;
+  font-size:13px;
+}
+
+@media (max-width:430px){
+  .pill-btn{
+    width:34px;
+    height:30px;
+    font-size:16px;
+  }
+  .title{
+    font-size:.9rem;
+  }
+  .subtitle{
+    font-size:7px;
+  }
+  #frame2 .main-card{
+    padding:4px 4px;
+  }
+  #frame2 .equation-mini{
+    font-size:1rem;
+  }
+  .answer-panel.shape-mode{
+    padding:3px;
+    gap:3px;
+  }
+  .answer-panel.shape-mode .answer-area{
+    gap:3px;
+  }
+  .answer-panel.shape-mode .answer-grid{
+    gap:4px;
+  }
+  .answer-panel.shape-mode .option-btn.shape-only{
+    min-height:72px;
+    padding:2px;
+  }
+  .answer-panel.shape-mode .option-btn.shape-only .icon{
+    height:58px;
+  }
+  .answer-panel.shape-mode .controls{
+    gap:3px;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+  .answer-panel.shape-mode .game-btn{
+    font-size:9.5px;
+    padding:5px 2px;
+  }
+  .story-actions .game-btn{
+    font-size:12px;
+    padding:5px 3px;
+  }
+}
+
+@media (max-height:780px) and (pointer:coarse){
+  .topbar{
+    padding:3px 4px;
+  }
+  .pill-btn{
+    width:32px;
+    height:28px;
+    font-size:15px;
+  }
+  .status-box{
+    padding:2px 1px;
+    font-size:6px;
+  }
+  .status-box span{
+    font-size:8px;
+  }
+  #frame2.active{
+    gap:3px;
+  }
+  #frame2 .main-card{
+    padding:4px 4px;
+  }
+  #frame2 .equation-mini{
+    font-size:.92rem;
+  }
+  #frame2 .help-line{
+    font-size:7px;
+  }
+  .answer-panel.shape-mode{
+    padding:3px;
+    gap:3px;
+  }
+  .answer-panel.shape-mode .answer-area{
+    gap:3px;
+  }
+  .answer-panel.shape-mode .answer-grid{
+    gap:3px;
+  }
+  .answer-panel.shape-mode .option-btn.shape-only{
+    min-height:64px;
+    padding:1px;
+    border-radius:10px;
+  }
+  .answer-panel.shape-mode .option-btn.shape-only .icon{
+    height:50px;
+  }
+  .answer-panel.shape-mode .controls{
+    gap:3px;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+  }
+  .answer-panel.shape-mode .game-btn{
+    font-size:8.8px;
+    padding:4px 1px;
+  }
+  .story-actions .game-btn{
+    font-size:11px;
+    padding:4px 2px;
+  }
+}
+  
+/* ===== roomier cake cards patch ===== */
+#frame2.active{
+  min-height:0;
+}
+.answer-panel.shape-mode{
+  flex:1 1 auto;
+  min-height:0;
+  align-items:stretch;
+}
+.answer-panel.shape-mode .answer-area{
+  height:100%;
+  min-height:0;
+  display:grid;
+  grid-template-rows:minmax(0,1fr) auto;
+  align-content:stretch;
+}
+.answer-panel.shape-mode .answer-grid{
+  min-height:0;
+  align-content:stretch;
+  grid-auto-rows:minmax(132px,1fr);
+}
+.answer-panel.shape-mode .option-btn.shape-only{
+  height:100%;
+  min-height:132px;
+}
+.answer-panel.shape-mode .option-btn.shape-only .icon{
+  height:100%;
+  min-height:104px;
+}
+.answer-panel.shape-mode .cake-art-wrap,
+.answer-panel.shape-mode .mini-cake-wrap{
+  height:100%;
+}
+.answer-panel.shape-mode .cake-art-img{
+  width:auto;
+  max-width:100%;
+  max-height:100%;
+}
+.answer-panel.shape-mode .mini-cake-wrap .cake-art-img,
+.answer-panel.shape-mode .mini-cake-wrap .cake-art-fallback{
+  max-width:min(100%,138px);
+}
+.answer-panel.shape-mode .fallback-svg{
+  max-width:100%;
+  max-height:100%;
+}
+
+@media (max-width:430px){
+  .answer-panel.shape-mode .answer-grid{
+    grid-auto-rows:minmax(120px,1fr);
+  }
+  .answer-panel.shape-mode .option-btn.shape-only{
+    min-height:120px;
+  }
+  .answer-panel.shape-mode .option-btn.shape-only .icon{
+    min-height:94px;
+  }
+  .answer-panel.shape-mode .mini-cake-wrap .cake-art-img,
+  .answer-panel.shape-mode .mini-cake-wrap .cake-art-fallback{
+    max-width:min(100%,130px);
+  }
+}
+
+@media (max-height:780px) and (pointer:coarse){
+  .answer-panel.shape-mode .answer-grid{
+    grid-auto-rows:minmax(108px,1fr);
+  }
+  .answer-panel.shape-mode .option-btn.shape-only{
+    min-height:108px;
+  }
+  .answer-panel.shape-mode .option-btn.shape-only .icon{
+    min-height:82px;
+  }
+  .answer-panel.shape-mode .mini-cake-wrap .cake-art-img,
+  .answer-panel.shape-mode .mini-cake-wrap .cake-art-fallback{
+    max-width:min(100%,118px);
+  }
+}
+
+</style>
+</head>
+<body>
+  <div class="cover" id="coverScreen">
+    <div class="cover-card">
+      <div class="cover-hero" aria-hidden="true">
+        <div class="hero-big">🎂 🧁 🍰</div>
+        <div style="font-weight:900;color:#8a4c2b;">Bake shapes, cut cakes, and help happy customers!</div>
+      </div>
+      <h1 class="cover-title">Sweet Cake Shop</h1>
+      <div class="cover-sub">Tap-friendly cake shape game for young learners</div>
+      <div class="cover-note">
+        <strong>Learning goals</strong><br>
+        Level 1 = basic shape recognition<br>
+        Level 2 = listen to the customer describe a cake shape and choose the correct cake<br>
+        Level 3 = look at 2 cake trays and decide how the cakes are grouped<br>
+        Level 4 = count whole, half, and quarter cakes in cake figures<br>
+        Level 5 = find the 2 cake shapes that make the composite cake<br>
+        Level 6 = bonus round with 1 challenge from each level<br>
+        Get all 5 correct in Level 6 to unlock the secret 5 tiered cake
+      </div>
+      <input id="coverNameInput" class="text-input" type="text" maxlength="20" placeholder="Type baker name">
+      <div class="cover-actions">
+        <button class="start-btn" id="coverStartBtn" type="button">▶ START BAKING</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="app" id="app">
+    <header class="topbar">
+      <div class="top-row">
+        <div>
+          <div class="title">Sweet Cake Shop</div>
+          <div class="subtitle">Customer Order → Bake → Baker</div>
+        </div>
+        <div class="top-actions">
+          <button class="pill-btn" id="soundToggleBtn" type="button" title="Sound and voice" aria-label="Sound and voice">🔊</button>
+<button class="pill-btn" id="changeUserBtn" type="button" title="Change baker" aria-label="Change baker">👤</button>
+<button class="pill-btn" id="infoBtn" type="button" title="Info" aria-label="Info">📘</button>
+        </div>
+      </div>
+      <div class="status-grid">
+        <div class="status-box">Baker<span id="playerNameText">Baker</span></div>
+        <div class="status-box">Level<span id="levelText">1</span></div>
+        <div class="status-box">Question<span><span id="qNumText">1</span>/<span id="qTotalText">4</span></span></div>
+        <div class="status-box">Round Score<span id="roundScoreText">0</span></div>
+        <div class="status-box">Total Score<span id="totalScoreText">0</span></div>
+        <div class="status-box">Goal<span id="goalText">Shapes</span></div>
+      </div>
+    </header>
+
+    <div class="tickets-wrap">
+      <div class="section-label">Question Trackers</div>
+      <div class="tickets" id="ticketsRow"></div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="section-label">Level Progress</div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
+
+    <div class="story-nav">
+      <div class="story-pill active" id="pill1">1. Order</div>
+      <div class="story-pill" id="pill2">2. Bake</div>
+      <div class="story-pill" id="pill3">3. Baker</div>
+    </div>
+
+    <section class="frame active" id="frame1">
+      <div class="frame-title">Customer Order</div>
+      <div class="character-frame">
+        <div class="avatar-stack">
+          <div class="avatar-emoji" id="customerAvatar">🧒</div>
+          <div class="avatar-badge" id="customerBadge">Happy Customer</div>
+        </div>
+      </div>
+      <div class="main-card">
+        <div class="dialogue" id="customerLine">A new cake order is ready.</div>
+        <div class="equation-big" id="orderEquation">Bake a square cake.</div>
+        <div class="help-line" id="orderHelp">Read the order, then go to the bake screen.</div>
+      </div>
+    </section>
+
+    <section class="frame" id="frame2">
+      <div class="frame-title">Bake the Cake</div>
+      <div class="main-card">
+        <div class="dialogue">Order reminder</div>
+        <div class="equation-face-row">
+          <div class="equation-mini" id="countEquation">Bake a square cake.</div>
+          <div class="mini-seller-wrap" id="miniSellerWrap">👩‍🍳</div>
+        </div>
+        <div class="help-line" id="countHelp">Tap an answer, then press Check.</div>
+      </div>
+
+      <div class="play-stage" id="playStage" aria-live="polite"></div>
+
+      <div class="reasoning-panel" id="reasoningPanel">
+        <div class="reasoning-title" id="reasoningTitle">Nice baking!</div>
+        <div class="reasoning-line" id="reasoningLine">A square has 4 equal sides.</div>
+      </div>
+
+      <div class="answer-panel" id="answerPanel">
+        <div>
+          <div class="answer-bubble" id="chosenBubble">?</div>
+          <div class="answer-mini">Chosen answer: <span id="chosenText">—</span></div>
+          <div class="served-line" id="servedLine"></div>
+        </div>
+        <div class="answer-area">
+          <div class="answer-grid" id="answerGrid"></div>
+          <div class="controls">
+            <button class="game-btn btn-check" id="checkBtn" type="button">✔ Check</button>
+            <button class="game-btn btn-hint" id="hintBtn" type="button">💡 Hint</button>
+            <button class="game-btn btn-clear" id="clearBtn" type="button">✖ Clear</button>
+            <button class="game-btn btn-next" id="nextBtn" type="button">➡ Next</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="frame" id="frame3">
+      <div class="frame-title">Baker</div>
+      <div class="seller-frame">
+        <div class="avatar-stack">
+          <div class="avatar-emoji" id="sellerAvatar">👩‍🍳</div>
+          <div class="avatar-badge" id="sellerBadge">Cake Baker</div>
+        </div>
+      </div>
+      <div class="speech" id="sellerSpeech">New order ready. Solve it first.</div>
+      <div class="note" id="missionLine">Level 1: Tap the matching cake shape.</div>
+      <div class="note">Best score on this device: <span id="bestScoreText">0</span> / <span id="maxScoreText">26</span></div>
+    </section>
+
+    <div class="story-actions">
+      <button class="game-btn btn-clear" id="backBtn" type="button">⬅ Back</button>
+      <button class="game-btn btn-next" id="forwardBtn" type="button">Next ➡</button>
+    </div>
+
+    <div class="feedback" id="feedback">Welcome to Sweet Cake Shop!</div>
+    <div class="footer">Designed by Lim Kim Sze © 2026</div>
+  </div>
+
+  <div class="modal" id="infoModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-title">Game Info</div>
+      <div class="report">
+        <strong>Level 1</strong> — shape recognition<br>
+        <strong>Level 2</strong> — customer describes a cake shape and the baker chooses the correct cake<br>
+        <strong>Level 3</strong> — look at 2 cake trays and decide how the cakes are grouped<br>
+        <strong>Level 4</strong> — count whole, half, and quarter cakes in cake figures<br>
+        <strong>Level 5</strong> — find the 2 cake shapes in a composite cake<br>
+        <strong>Level 6</strong> — bonus round with 1 challenge from each level; get all 5 correct to unlock the secret 5 tiered cake<br><br>
+        Cake image files used by this HTML:<br>
+        • square_cake.png<br>
+        • rectangle_cake.png<br>
+        • triangle_cake.png<br>
+        • circle_cake.png<br>
+        • half_cake.png<br>
+        • quarter_cake.png<br><br>
+        Audio files used by this HTML:<br>
+        • opening_music<br>
+        • opening_sound<br>
+        • sfx_order_bell<br>
+        • correct_chime<br>
+        • wrong_bloop<br>
+        • level_tada
+      </div>
+      <div class="modal-actions">
+        <button class="game-btn btn-check" id="closeInfoBtn" type="button">✔ Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="introModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-title" id="introTitle">Level 1 — Shape Recognition</div>
+      <div class="modal-badge" id="introBadge">Shape Baker</div>
+      <div class="modal-line" id="introMission">Tap the shape the customer asks for.</div>
+      <div class="report" id="introDetails"></div>
+      <div class="modal-actions">
+        <button class="game-btn btn-check" id="startLevelBtn" type="button">🎂 Start Level</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="roundModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-title" id="roundTitle">Level Complete!</div>
+      <div class="modal-badge" id="roundBadge">Cake Star</div>
+      <div class="report" id="roundReport"></div>
+      <div class="modal-line" id="roundLine">Great work!</div>
+      <div class="modal-actions" id="roundActions"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="nameModal" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-title">Change Baker</div>
+      <div class="modal-line">Type the baker name for this device.</div>
+      <input id="playerNameInput" class="text-input" type="text" maxlength="20" placeholder="Type baker name">
+      <div class="modal-actions" style="margin-top:12px;">
+        <button class="game-btn btn-check" id="saveNameBtn" type="button">✔ Save</button>
+      </div>
+    </div>
+  </div>
+
+  <audio id="audioOpeningMusic" preload="auto" loop></audio>
+  <audio id="audioOpeningSound" preload="auto"></audio>
+  <audio id="audioOrderBell" preload="auto"></audio>
+  <audio id="audioCorrect" preload="auto"></audio>
+  <audio id="audioWrong" preload="auto"></audio>
+  <audio id="audioTada" preload="auto"></audio>
+  <div class="confetti-layer" id="confettiLayer"></div>
+
+  <script>
+    function setAppHeight(){
+      document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px');
+    }
+    setAppHeight();
+    window.addEventListener('resize', setAppHeight);
+    window.addEventListener('orientationchange', setAppHeight);
+
+    document.addEventListener('wheel', function(e){
+      if(e.ctrlKey) e.preventDefault();
+    }, { passive:false });
+
+    ['gesturestart','gesturechange','gestureend'].forEach(type=>{
+      document.addEventListener(type, function(e){ e.preventDefault(); }, { passive:false });
+    });
+
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(e){
+      const now = Date.now();
+      if(now - lastTouchEnd <= 300) e.preventDefault();
+      lastTouchEnd = now;
+    }, { passive:false });
+
+    const SHAPE_META = {
+      square:{ label:'Square', short:'Square', color:'#ffc3da', icing:'#ff8fbd' },
+      rectangle:{ label:'Rectangle', short:'Rect.', color:'#bff1e2', icing:'#66d3b0' },
+      triangle:{ label:'Triangle', short:'Tri.', color:'#ffe49c', icing:'#ffc24a' },
+      circle:{ label:'Circle', short:'Circle', color:'#d9c7ff', icing:'#b492ff' },
+      half:{ label:'Half circle', short:'Half', color:'#ffd5b8', icing:'#ffae77' },
+      quarter:{ label:'Quarter circle', short:'Quarter', color:'#ffd4a7', icing:'#ffb24e' }
+    };
+
+    const CAKE_ASSETS = {
+      square:'square_cake.png',
+      rectangle:'rectangle_cake.png',
+      triangle:'triangle_cake.png',
+      circle:'circle_cake.png',
+      half:'half_cake.png',
+      quarter:'quarter_cake.png'
+    };
+
+    const STORE_NAME = 'sweet_cake_shop_player_name';
+    const STORE_BEST = 'sweet_cake_shop_best_score';
+
+    const safeStore = {
+      get(key, fallback){
+        try{
+          const value = localStorage.getItem(key);
+          return value === null ? fallback : value;
+        }catch(err){
+          return fallback;
+        }
+      },
+      set(key, value){
+        try{
+          localStorage.setItem(key, String(value));
+        }catch(err){}
+      }
+    };
+
+    const levelConfigs = {
+      1:{
+        name:'Level 1 — Shape Recognition',
+        badge:'Shape Baker',
+        goal:'Shapes',
+        mission:'Tap the cake shape the customer asks for.',
+        details:'Look carefully at the cake shapes. Choose rectangle, square, triangle, or circle.'
+      },
+      2:{
+        name:'Level 2 — Customer Shape Orders',
+        badge:'Cake Order Detective',
+        goal:'Orders',
+        mission:'Listen to the customer describe the cake shape, then choose the correct cake.',
+        details:'The customer describes the cake using words like round, corners, vertex, vertices, long sides, and short sides. Tap the correct cake.'
+      },
+      3:{
+        name:'Level 3 — Cake Sorting',
+        badge:'Cake Sorter',
+        goal:'Sorting',
+        mission:'Look at the 2 cake trays and decide how the cakes are grouped.',
+        details:'Choose from shape, size, colour, or number of sides and vertices.'
+      },
+      4:{
+        name:'Level 4 — Count the Cake Parts',
+        badge:'Cake Counter',
+        goal:'Counting',
+        mission:'Count how many whole, half, or quarter cakes are in each cake figure.',
+        details:'Look carefully at the cake figure. Count the whole round cakes, half cakes, or quarter cakes.'
+      },
+      5:{
+        name:'Level 5 — Name the 2 Cake Shapes',
+        badge:'Cake Shape Builder',
+        goal:'Shapes',
+        mission:'Look at the line on the composite cake, then choose the 2 shapes that make it.',
+        details:'Each composite cake is made from 2 shapes. Choose 2 correct answers, then press Check.'
+      },
+      6:{
+        name:'Level 6 — Bonus Secret Cake Round',
+        badge:'Secret Cake Hunter',
+        goal:'Bonus',
+        mission:'Complete 1 challenge from each earlier level. Get all 5 correct to unlock the secret 5 tiered cake.',
+        details:'Bonus round: 5 questions in total, with 1 question from each of Levels 1 to 5. Get all 5 correct to unlock the secret 5 tiered cake.'
+      }
+    };
+
+    const totalMaxScore = 26;
+    const SECRET_CAKE_IMAGE = 'secret_5_tiered_cake.png';
+    const customerImageFiles = [
+      'customer_01_happy_girl.png',
+      'customer_02_happy_boy.png',
+      'customer_03_glasses.png',
+      'customer_04_cap.png',
+      'customer_05_vip_princess.png'
+    ];
+    const sellerImageFiles = {
+      neutral:'seller_neutral_cute.png',
+      good:'seller_happy_cute.png',
+      bad:'seller_sad_cute.png'
+    };
+    const customerBadges = ['Happy Customer','Cake Lover','Bakery Friend','Birthday Guest','Shop Visitor'];
+
+    const happyLines = [
+      'Sweet! You baked the right answer!',
+      'Yummy! That was the perfect choice!',
+      'Sprinkle-tastic! You got it right!',
+      'Lovely baking! That answer is correct!',
+      'Cake-tastic! You helped the customer!'
+    ];
+    const wrongLines = [
+      'Oops! That cake got a little messy.',
+      'Not yet. Let’s tidy that cake idea.',
+      'Whoopsie! Try a calmer baker brain.',
+      'Almost! The frosting slipped a bit.',
+      'Friendly mistake. Let’s learn from it!'
+    ];
+
+    const objectBank = [
+      { key:'cake-box', label:'cake box', answer:'square', emoji:'🎁' },
+      { key:'cake-tray', label:'cake tray', answer:'rectangle', emoji:'🍱' },
+      { key:'cake-slice', label:'cake slice', answer:'triangle', emoji:'🍰' },
+      { key:'round-cookie', label:'round cookie', answer:'circle', emoji:'🍪' },
+      { key:'half-moon-pie', label:'half-moon pie', answer:'half', emoji:'🥟' },
+      { key:'orange-wedge', label:'orange wedge', answer:'quarter', emoji:'🍊' }
+    ];
+
+    const coverScreen = document.getElementById('coverScreen');
+    const coverNameInput = document.getElementById('coverNameInput');
+    const coverStartBtn = document.getElementById('coverStartBtn');
+    const app = document.getElementById('app');
+
+    const playerNameText = document.getElementById('playerNameText');
+    const levelText = document.getElementById('levelText');
+    const qNumText = document.getElementById('qNumText');
+    const qTotalText = document.getElementById('qTotalText');
+    const roundScoreText = document.getElementById('roundScoreText');
+    const totalScoreText = document.getElementById('totalScoreText');
+    const goalText = document.getElementById('goalText');
+    const ticketsRow = document.getElementById('ticketsRow');
+    const progressFill = document.getElementById('progressFill');
+
+    const frame1 = document.getElementById('frame1');
+    const frame2 = document.getElementById('frame2');
+    const frame3 = document.getElementById('frame3');
+
+    const pill1 = document.getElementById('pill1');
+    const pill2 = document.getElementById('pill2');
+    const pill3 = document.getElementById('pill3');
+
+    const customerAvatar = document.getElementById('customerAvatar');
+    const customerBadge = document.getElementById('customerBadge');
+    const customerLine = document.getElementById('customerLine');
+    const orderEquation = document.getElementById('orderEquation');
+    const orderHelp = document.getElementById('orderHelp');
+
+    const countEquation = document.getElementById('countEquation');
+    const countHelp = document.getElementById('countHelp');
+    const miniSellerWrap = document.getElementById('miniSellerWrap');
+    const playStage = document.getElementById('playStage');
+
+    const reasoningPanel = document.getElementById('reasoningPanel');
+    const reasoningTitle = document.getElementById('reasoningTitle');
+    const reasoningLine = document.getElementById('reasoningLine');
+
+    const chosenBubble = document.getElementById('chosenBubble');
+    const chosenText = document.getElementById('chosenText');
+    const servedLine = document.getElementById('servedLine');
+    const answerPanel = document.getElementById('answerPanel');
+    const answerGrid = document.getElementById('answerGrid');
+    const checkBtn = document.getElementById('checkBtn');
+    const hintBtn = document.getElementById('hintBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    const sellerAvatar = document.getElementById('sellerAvatar');
+    const sellerBadge = document.getElementById('sellerBadge');
+    const sellerSpeech = document.getElementById('sellerSpeech');
+    const missionLine = document.getElementById('missionLine');
+    const bestScoreText = document.getElementById('bestScoreText');
+    const maxScoreText = document.getElementById('maxScoreText');
+
+    const feedback = document.getElementById('feedback');
+    const backBtn = document.getElementById('backBtn');
+    const forwardBtn = document.getElementById('forwardBtn');
+
+    const soundToggleBtn = document.getElementById('soundToggleBtn');
+    const changeUserBtn = document.getElementById('changeUserBtn');
+    const infoBtn = document.getElementById('infoBtn');
+
+    const infoModal = document.getElementById('infoModal');
+    const closeInfoBtn = document.getElementById('closeInfoBtn');
+
+    const introModal = document.getElementById('introModal');
+    const introTitle = document.getElementById('introTitle');
+    const introBadge = document.getElementById('introBadge');
+    const introMission = document.getElementById('introMission');
+    const introDetails = document.getElementById('introDetails');
+    const startLevelBtn = document.getElementById('startLevelBtn');
+
+    const roundModal = document.getElementById('roundModal');
+    const roundTitle = document.getElementById('roundTitle');
+    const roundBadge = document.getElementById('roundBadge');
+    const roundReport = document.getElementById('roundReport');
+    const roundLine = document.getElementById('roundLine');
+    const roundActions = document.getElementById('roundActions');
+
+    const nameModal = document.getElementById('nameModal');
+    const playerNameInput = document.getElementById('playerNameInput');
+    const saveNameBtn = document.getElementById('saveNameBtn');
+
+    const audioOpeningMusic = document.getElementById('audioOpeningMusic');
+    const audioOpeningSound = document.getElementById('audioOpeningSound');
+    const audioOrderBell = document.getElementById('audioOrderBell');
+    const audioCorrect = document.getElementById('audioCorrect');
+    const audioWrong = document.getElementById('audioWrong');
+    const audioTada = document.getElementById('audioTada');
+    const confettiLayer = document.getElementById('confettiLayer');
+
+    let soundOn = true;
+    let audioCtx = null;
+
+    let currentLevel = 1;
+    let currentQuestions = [];
+    let currentQuestionIndex = 0;
+    let currentQuestion = null;
+    let currentRoundScore = 0;
+    let totalScore = 0;
+    let selectedAnswer = null;
+    let questionResolved = false;
+    let currentStep = 1;
+    let stageState = 'idle';
+    let secretCakeUnlocked = false;
+
+    let speechVoices = [];
+    let speechTimer = null;
+
+    function randomFrom(list){
+      return list[Math.floor(Math.random() * list.length)];
+    }
+
+    function shuffle(list){
+      const arr = list.slice();
+      for(let i = arr.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function ensureAudioContext(){
+      if(!audioCtx){
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if(AC) audioCtx = new AC();
+      }
+      if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume().catch(()=>{});
+    }
+
+    function tone(freq, duration=0.08, type='sine', volume=0.03){
+      if(!soundOn) return;
+      try{
+        ensureAudioContext();
+        if(!audioCtx) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        gain.gain.value = volume;
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        const now = audioCtx.currentTime;
+        gain.gain.setValueAtTime(volume, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+        osc.start(now);
+        osc.stop(now + duration);
+      }catch(err){}
+    }
+
+    function fallbackCorrect(){
+      tone(740,0.08,'triangle',0.035);
+      setTimeout(()=>tone(988,0.11,'triangle',0.03),80);
+    }
+    function fallbackWrong(){
+      tone(210,0.11,'sawtooth',0.03);
+      setTimeout(()=>tone(176,0.14,'sawtooth',0.024),85);
+    }
+    function fallbackTada(){
+      tone(659,0.08,'triangle',0.03);
+      setTimeout(()=>tone(880,0.08,'triangle',0.03),90);
+      setTimeout(()=>tone(1047,0.12,'triangle',0.03),180);
+    }
+    function fallbackOrderBell(){
+      tone(740,0.06,'sine',0.025);
+      setTimeout(()=>tone(988,0.09,'sine',0.025),75);
+    }
+    function fallbackTap(){
+      tone(420,0.04,'sine',0.02);
+    }
+
+    window.addEventListener('pointerdown', ensureAudioContext, { once:true });
+
+    function setAudioSource(audio, srcOrList){
+      const list = Array.isArray(srcOrList) ? srcOrList.filter(Boolean) : [srcOrList];
+      audio.dataset.candidates = JSON.stringify(list);
+      audio.dataset.index = '0';
+      audio.dataset.failed = '0';
+      function loadAt(index){
+        if(index >= list.length){
+          audio.dataset.failed = '1';
+          return;
+        }
+        audio.dataset.index = String(index);
+        audio.onerror = ()=>loadAt(index + 1);
+        audio.src = list[index];
+        audio.load();
+      }
+      loadAt(0);
+    }
+
+    function playAssetSound(audioEl, fallbackFn){
+      if(!soundOn) return;
+      if(audioEl.dataset.failed === '1'){
+        fallbackFn();
+        return;
+      }
+      try{
+        audioEl.currentTime = 0;
+        const p = audioEl.play();
+        if(p && typeof p.catch === 'function') p.catch(()=>fallbackFn());
+      }catch(err){
+        fallbackFn();
+      }
+    }
+
+    function startOpeningMusic(){
+      if(!soundOn || audioOpeningMusic.dataset.failed === '1') return;
+      try{
+        if(!audioOpeningMusic.paused) return;
+        audioOpeningMusic.dataset.forceStopped = '0';
+        audioOpeningMusic.muted = false;
+        audioOpeningMusic.loop = true;
+        audioOpeningMusic.volume = 1;
+        const p = audioOpeningMusic.play();
+        if(p && typeof p.catch === 'function') p.catch(()=>{});
+      }catch(err){}
+    }
+
+    function stopOpeningMusic(){
+      try{
+        audioOpeningMusic.dataset.forceStopped = '1';
+        audioOpeningMusic.loop = false;
+        audioOpeningMusic.muted = true;
+        audioOpeningMusic.pause();
+        audioOpeningMusic.currentTime = 0;
+        audioOpeningMusic.load();
+      }catch(err){}
+    }
+
+    function stopAllAudio(){
+      [audioOpeningMusic,audioOpeningSound,audioOrderBell,audioCorrect,audioWrong,audioTada].forEach(audio=>{
+        try{
+          audio.pause();
+          audio.currentTime = 0;
+        }catch(err){}
+      });
+    }
+
+    function loadSpeechVoices(){
+      if(!('speechSynthesis' in window)) return;
+      try{
+        speechVoices = window.speechSynthesis.getVoices() || [];
+      }catch(err){
+        speechVoices = [];
+      }
+    }
+
+    function stopSpeaking(){
+      if(!('speechSynthesis' in window)) return;
+      try{
+        window.speechSynthesis.cancel();
+      }catch(err){}
+    }
+
+    function pickBritishVoice(){
+      loadSpeechVoices();
+      const voices = speechVoices || [];
+      return (
+        voices.find(v => /^en-GB/i.test(v.lang) && /google uk|british|daniel|arthur|libby|serena|hazel|kate|amy|emma/i.test(v.name)) ||
+        voices.find(v => /^en-GB/i.test(v.lang)) ||
+        voices.find(v => /^en/i.test(v.lang)) ||
+        null
+      );
+    }
+
+    function speakTextSlowBritish(text){
+      if(!soundOn || !('speechSynthesis' in window) || !text) return;
+      try{
+        stopSpeaking();
+        const utterance = new SpeechSynthesisUtterance(
+          String(text).replace(/[“”"]/g, '').replace(/\s+/g, ' ').trim()
+        );
+        const voice = pickBritishVoice();
+        if(voice) utterance.voice = voice;
+        utterance.lang = voice?.lang || 'en-GB';
+        utterance.rate = 0.78;
+        utterance.pitch = 1;
+        utterance.volume = 1;
+        window.speechSynthesis.speak(utterance);
+      }catch(err){}
+    }
+
+    function speakCurrentQuestion(){
+      if(!currentQuestion) return;
+      let text = '';
+      if(currentQuestion.customerText && currentQuestion.prompt){
+        text = `${currentQuestion.customerText} ${currentQuestion.prompt}`;
+      }else{
+        text = currentQuestion.prompt || currentQuestion.customerText || '';
+      }
+      if(speechTimer) clearTimeout(speechTimer);
+      speechTimer = setTimeout(()=>{
+        speakTextSlowBritish(text);
+      }, 250);
+    }
+
+    function funnyCorrectLine(){ return randomFrom(happyLines); }
+    function funnyWrongLine(){ return randomFrom(wrongLines); }
+
+    function setAvatarImage(targetEl, src, altText){
+      targetEl.innerHTML = `<img src="${src}" alt="${altText}">`;
+    }
+
+    function setMiniSellerImage(src, altText, stateClass=''){
+      miniSellerWrap.className = 'mini-seller-wrap' + (stateClass ? ' ' + stateClass : '');
+      miniSellerWrap.innerHTML = `<img src="${src}" alt="${altText}">`;
+    }
+
+    function secretCakeRewardHTML(){
+      return `
+        <div style="margin-top:12px;text-align:center;">
+          <img
+            src="${SECRET_CAKE_IMAGE}"
+            alt="Secret 5 tiered cake"
+            style="display:block;max-width:180px;max-height:180px;width:auto;height:auto;margin:0 auto 8px;"
+            onerror="this.style.display='none';this.insertAdjacentHTML('afterend','<div style=&quot;font-weight:900;color:#a04271;font-size:18px;&quot;>🎂 Secret 5 Tiered Cake 🎂</div>');"
+          >
+          <div style="font-weight:900;color:#a04271;">Secret 5 Tiered Cake</div>
+        </div>
+      `;
+    }
+
+    function optionShape(key){
+      return { key, label:SHAPE_META[key].label, short:SHAPE_META[key].short, visual:{kind:'shape', value:key} };
+    }
+
+    function pieceOption(key){
+      const map = {
+        whole:{ label:'Whole cake', short:'Whole', visual:{kind:'piece', value:'whole'} },
+        half:{ label:'Half cake', short:'Half', visual:{kind:'piece', value:'half'} },
+        quarter:{ label:'Quarter cake', short:'Quarter', visual:{kind:'piece', value:'quarter'} }
+      };
+      return { key, label:map[key].label, short:map[key].short, visual:map[key].visual };
+    }
+
+    function cutOption(key){
+      const map = {
+        half:{ label:'2 equal parts', short:'2 parts', visual:{kind:'cut', value:'half'} },
+        quarter:{ label:'4 equal parts', short:'4 parts', visual:{kind:'cut', value:'quarter'} },
+        uneven:{ label:'Unequal parts', short:'Unequal', visual:{kind:'cut', value:'uneven'} }
+      };
+      return { key, label:map[key].label, short:map[key].short, visual:map[key].visual };
+    }
+
+    function comboOption(key){
+      const map = {
+        'two-halves':{ label:'2 halves', short:'2 × ½', visual:{kind:'combo', value:'two-halves'} },
+        'four-quarters':{ label:'4 quarters', short:'4 × ¼', visual:{kind:'combo', value:'four-quarters'} },
+        'one-half':{ label:'1 half', short:'1 × ½', visual:{kind:'combo', value:'one-half'} },
+        'three-quarters':{ label:'3 quarters', short:'3 × ¼', visual:{kind:'combo', value:'three-quarters'} }
+      };
+      return { key, label:map[key].label, short:map[key].short, visual:map[key].visual };
+    }
+
+    function namedShapeOption(key){
+      const map = {
+        square:{ label:'Square', short:'Square' },
+        rectangle:{ label:'Rectangle', short:'Rect.' },
+        triangle:{ label:'Triangle', short:'Tri.' },
+        'half-circle':{ label:'Half circle', short:'Half' },
+        'quarter-circle':{ label:'Quarter circle', short:'Quarter' }
+      };
+      return { key, label:map[key].label, short:map[key].short, visual:null };
+    }
+
+    function compositeShapeOptions(){
+      return [
+        namedShapeOption('square'),
+        namedShapeOption('rectangle'),
+        namedShapeOption('triangle'),
+        namedShapeOption('half-circle'),
+        namedShapeOption('quarter-circle')
+      ];
+    }
+
+    function isMultiSelectQuestion(){
+      return !!(currentQuestion && currentQuestion.multiSelect);
+    }
+
+    function getSelectedKeys(){
+      if(isMultiSelectQuestion()) return Array.isArray(selectedAnswer) ? selectedAnswer : [];
+      return selectedAnswer ? [selectedAnswer] : [];
+    }
+
+    function isCorrectOptionKey(key){
+      if(!currentQuestion) return false;
+      return Array.isArray(currentQuestion.correct)
+        ? currentQuestion.correct.includes(key)
+        : currentQuestion.correct === key;
+    }
+
+    function formatOptionLabels(keys){
+      const labels = (keys || []).map(key => getOptionByKey(key)?.label || key);
+      if(!labels.length) return '';
+      if(labels.length === 1) return labels[0];
+      if(labels.length === 2) return labels[0] + ' and ' + labels[1];
+      return labels.slice(0, -1).join(', ') + ', and ' + labels[labels.length - 1];
+    }
+
+    function numberOption(n){
+      return { key:String(n), label:String(n), short:String(n) };
+    }
+
+    function numberOptions(max){
+      return Array.from({length:max + 1}, (_, i) => numberOption(i));
+    }
+
+    function categoryOption(key){
+      const map = {
+        shape:{ label:'Shape', short:'Shape' },
+        size:{ label:'Size', short:'Size' },
+        colour:{ label:'Colour', short:'Colour' },
+        'number-of-sides-and-vertices':{ label:'Number of sides and vertices', short:'Sides' }
+      };
+      return { key, label:map[key].label, short:map[key].short };
+    }
+
+    function getPlayerName(){
+      const raw = String(safeStore.get(STORE_NAME, 'Baker') || '').trim().replace(/\s+/g,' ');
+      return (raw || 'Baker').slice(0,20);
+    }
+
+    function setPlayerName(name){
+      const finalName = String(name || '').trim().replace(/\s+/g,' ').slice(0,20) || 'Baker';
+      safeStore.set(STORE_NAME, finalName);
+      playerNameText.textContent = finalName;
+      coverNameInput.value = finalName;
+      playerNameInput.value = finalName;
+    }
+
+    function getBestScore(){
+      return Number(safeStore.get(STORE_BEST, 0) || 0);
+    }
+
+    function setBestScore(score){
+      if(score > getBestScore()) safeStore.set(STORE_BEST, score);
+      bestScoreText.textContent = String(getBestScore());
+    }
+
+    function showModal(el){
+      el.classList.add('show');
+      el.setAttribute('aria-hidden','false');
+    }
+
+    function hideModal(el){
+      el.classList.remove('show');
+      el.setAttribute('aria-hidden','true');
+    }
+
+    function buildLevelQuestions(level){
+      if(level === 1){
+        return shuffle(['square','rectangle','triangle','circle']).map(shape => ({
+          playMode:'shape-recognition',
+          prompt:`Bake a ${SHAPE_META[shape].label.toLowerCase()} cake.`,
+          help:'Tap the matching cake shape.',
+          customerText:`Please bake a ${SHAPE_META[shape].label.toLowerCase()} cake for me!`,
+          options:shuffle(['square','rectangle','triangle','circle'].map(optionShape)),
+          correct:shape,
+          reasoning:
+            shape === 'square' ? 'A square has 4 equal sides.' :
+            shape === 'rectangle' ? 'A rectangle has 4 sides and 2 long sides + 2 short sides.' :
+            shape === 'triangle' ? 'A triangle has 3 sides.' :
+            'A circle is round all the way around.',
+          hint:
+            shape === 'square' ? 'Look for 4 equal sides.' :
+            shape === 'rectangle' ? 'Look for a long shape with 4 sides.' :
+            shape === 'triangle' ? 'Look for 3 sides.' :
+            'Look for the round cake.'
+        }));
+      }
+
+      if(level === 2){
+        return shuffle([
+          {
+            playMode:'shape-recognition',
+            prompt:'Which cake should the baker choose?',
+            help:'Listen to the customer’s description, then tap the correct cake shape.',
+            orderReminder:'3 sides • 3 corners • 3 vertices',
+            customerText:'Baker, please make me a cake with 3 sides and 3 corners. Each corner is a vertex, so the cake has 3 vertices.',
+            options:shuffle(['square','rectangle','triangle','circle'].map(optionShape)),
+            correct:'triangle',
+            reasoning:'The baker should choose the triangle cake. It has 3 sides, 3 corners, and 3 vertices.',
+            hint:'A triangle has 3 sides. Each corner is a vertex.'
+          },
+          {
+            playMode:'shape-recognition',
+            prompt:'Which cake should the baker choose?',
+            help:'Listen to the customer’s description, then tap the correct cake shape.',
+            orderReminder:'Round • no corners • no vertices',
+            customerText:'Baker, please make me a round cake with no corners and no vertices.',
+            options:shuffle(['square','rectangle','triangle','circle'].map(optionShape)),
+            correct:'circle',
+            reasoning:'The baker should choose the circle cake. It is round and has no corners or vertices.',
+            hint:'Look for the round cake.'
+          },
+          {
+            playMode:'shape-recognition',
+            prompt:'Which cake should the baker choose?',
+            help:'Listen to the customer’s description, then tap the correct cake shape.',
+            orderReminder:'4 equal sides • 4 corners • 4 vertices',
+            customerText:'Baker, please make me a cake with 4 equal sides and 4 corners. Each corner is a vertex, so the cake has 4 vertices.',
+            options:shuffle(['square','rectangle','triangle','circle'].map(optionShape)),
+            correct:'square',
+            reasoning:'The baker should choose the square cake. It has 4 equal sides, 4 corners, and 4 vertices.',
+            hint:'All 4 sides are equal. Each corner is a vertex.'
+          },
+          {
+            playMode:'shape-recognition',
+            prompt:'Which cake should the baker choose?',
+            help:'Listen to the customer’s description, then tap the correct cake shape.',
+            orderReminder:'2 long sides • 2 short sides • 4 vertices',
+            customerText:'Baker, please make me a cake with 2 long sides, 2 short sides, and 4 corners. Each corner is a vertex, so the cake has 4 vertices.',
+            options:shuffle(['square','rectangle','triangle','circle'].map(optionShape)),
+            correct:'rectangle',
+            reasoning:'The baker should choose the rectangle cake. It has 2 long sides, 2 short sides, 4 corners, and 4 vertices.',
+            hint:'A rectangle has 2 long sides and 2 short sides. Each corner is a vertex.'
+          }
+        ]);
+      }
+
+      if(level === 3){
+        const categoryOptions = [
+          categoryOption('shape'),
+          categoryOption('size'),
+          categoryOption('colour'),
+          categoryOption('number-of-sides-and-vertices')
+        ];
+
+        return [
+          {
+            playMode:'grouping',
+            prompt:'How did the baker group the cakes?',
+            help:'Choose shape, size, or colour.',
+            countHelp:'Look at both cake trays. Then choose the sorting rule.',
+            customerText:'The baker sorted the display cakes into 2 trays. How did the baker group the cakes?',
+            options:[categoryOption('shape'),categoryOption('size'),categoryOption('colour')],
+            correct:'shape',
+            grouping:{
+              left:[
+                {shape:'triangle', size:'small', style:'filled', rotate:0},
+                {shape:'triangle', size:'small', style:'outline', rotate:0},
+                {shape:'triangle', size:'large', style:'filled', rotate:0},
+                {shape:'triangle', size:'medium', style:'outline', rotate:-12}
+              ],
+              right:[
+                {shape:'rectangle', size:'medium', style:'outline', rotate:0},
+                {shape:'rectangle', size:'large', style:'filled', rotate:18},
+                {shape:'rectangle', size:'small', style:'filled', rotate:0},
+                {shape:'rectangle', size:'medium', style:'outline', rotate:34}
+              ]
+            },
+            reasoning:'The cakes are grouped by shape. One tray has triangle cakes. The other tray has rectangle cakes.',
+            hint:'Ignore the sizes. Look at the kind of cake in each tray.'
+          },
+          {
+            playMode:'grouping',
+            prompt:'How did the baker group the cakes?',
+            help:'Choose shape, size, colour, or number of sides and vertices.',
+            countHelp:'Look at the frosting colours in both trays.',
+            customerText:'The baker used 2 trays for the mini cakes. How are the cakes grouped this time?',
+            options:categoryOptions,
+            correct:'colour',
+            grouping:{
+              left:[
+                {shape:'circle', size:'medium', style:'filled', rotate:0},
+                {shape:'rectangle', size:'large', style:'filled', rotate:0},
+                {shape:'rectangle', size:'medium', style:'filled', rotate:0},
+                {shape:'triangle', size:'small', style:'filled', rotate:-18}
+              ],
+              right:[
+                {shape:'triangle', size:'large', style:'outline', rotate:-20},
+                {shape:'circle', size:'large', style:'outline', rotate:0},
+                {shape:'square', size:'small', style:'outline', rotate:0},
+                {shape:'rectangle', size:'medium', style:'outline', rotate:0}
+              ]
+            },
+            reasoning:'The cakes are grouped by colour. One tray has coloured cakes. The other tray has plain outline cakes.',
+            hint:'Do not focus on the shapes. Look at which cakes are coloured in.'
+          },
+          {
+            playMode:'grouping',
+            prompt:'How did the baker group the cakes?',
+            help:'Choose shape, size, or colour.',
+            countHelp:'Look at the cake shape on each tray.',
+            customerText:'These bakery display cakes are sorted into 2 trays. What rule did the baker use?',
+            options:[categoryOption('shape'),categoryOption('size'),categoryOption('colour')],
+            correct:'shape',
+            grouping:{
+              left:[
+                {shape:'circle', size:'large', style:'outline', rotate:0},
+                {shape:'circle', size:'small', style:'filled', rotate:0},
+                {shape:'circle', size:'small', style:'outline', rotate:0},
+                {shape:'circle', size:'large', style:'filled', rotate:0}
+              ],
+              right:[
+                {shape:'square', size:'small', style:'filled', rotate:45},
+                {shape:'square', size:'small', style:'outline', rotate:0},
+                {shape:'square', size:'large', style:'outline', rotate:0},
+                {shape:'square', size:'small', style:'outline', rotate:-25}
+              ]
+            },
+            reasoning:'The cakes are grouped by shape. One tray has circle cakes. The other tray has square cakes.',
+            hint:'One tray shows only round cakes.'
+          },
+          {
+            playMode:'grouping',
+            prompt:'How did the baker group the cakes?',
+            help:'Choose shape, size, colour, or number of sides and vertices.',
+            countHelp:'Look at whether the cakes are big or small.',
+            customerText:'The baker sorted big celebration cakes into one tray and tiny sample cakes into another. What is the rule?',
+            options:categoryOptions,
+            correct:'size',
+            grouping:{
+              left:[
+                {shape:'rectangle', size:'large', style:'filled', rotate:4},
+                {shape:'triangle', size:'large', style:'filled', rotate:0},
+                {shape:'circle', size:'large', style:'filled', rotate:0},
+                {shape:'square', size:'large', style:'filled', rotate:8}
+              ],
+              right:[
+                {shape:'circle', size:'small', style:'filled', rotate:0},
+                {shape:'square', size:'small', style:'filled', rotate:6},
+                {shape:'rectangle', size:'small', style:'filled', rotate:-22},
+                {shape:'triangle', size:'small', style:'filled', rotate:-10}
+              ]
+            },
+            reasoning:'The cakes are grouped by size. One tray has big cakes. The other tray has small cakes.',
+            hint:'Look at how big each cake is, not at the shape.'
+          },
+          {
+            playMode:'grouping',
+            prompt:'How did the baker group the cakes?',
+            help:'Choose shape, size, colour, or number of sides and vertices.',
+            countHelp:'Think about how many sides and vertices each cake shape has.',
+            customerText:'The baker grouped the cakes by a maths rule. How are the cakes grouped?',
+            options:categoryOptions,
+            correct:'number-of-sides-and-vertices',
+            grouping:{
+              left:[
+                {shape:'rectangle', size:'medium', style:'outline', rotate:-10},
+                {shape:'square', size:'medium', style:'outline', rotate:-8},
+                {shape:'square', size:'small', style:'filled', rotate:18},
+                {shape:'rectangle', size:'medium', style:'filled', rotate:0}
+              ],
+              right:[
+                {shape:'triangle', size:'medium', style:'filled', rotate:-10},
+                {shape:'triangle', size:'small', style:'outline', rotate:0},
+                {shape:'triangle', size:'large', style:'outline', rotate:-16},
+                {shape:'triangle', size:'medium', style:'filled', rotate:0}
+              ]
+            },
+            reasoning:'The cakes are grouped by number of sides and vertices. One tray has 4-sided cakes with 4 vertices. The other tray has 3-sided cakes with 3 vertices.',
+            hint:'Count the sides and the corners on the cake shapes.'
+          }
+        ];
+      }
+
+      if(level === 4){
+        const countChoices = numberOptions(3);
+        return [
+          {
+            playMode:'count-figure',
+            prompt:'How many quarter cakes can you find?',
+            orderReminder:'Count the quarter cakes.',
+            help:'Look at the cake figure. Count only the quarter cakes.',
+            countHelp:'Look carefully at the cake figure. Count only the quarter cakes.',
+            customerText:'The baker made a cake display. How many quarter cakes can you find?',
+            options:countChoices,
+            correct:'2',
+            figure:[
+              {type:'quarter', x:60, y:24, rotate:-90, scale:0.9},
+              {type:'circle', x:40, y:49, scale:0.82},
+              {type:'quarter', x:30, y:76, rotate:180, scale:0.9}
+            ],
+            reasoning:'There are 1 whole round cake, 0 half cakes, and 2 quarter cakes. So the number of quarter cakes is 2.',
+            hint:'Ignore the whole round cake. Count only the quarter cakes.'
+          },
+          {
+            playMode:'count-figure',
+            prompt:'How many half cakes can you find?',
+            orderReminder:'Count the half cakes.',
+            help:'Look at the cake figure. Count only the half cakes.',
+            countHelp:'Look carefully at the cake figure. Count only the half cakes.',
+            customerText:'The baker arranged some cake parts on a tray. How many half cakes can you find?',
+            options:countChoices,
+            correct:'1',
+            figure:[
+              {type:'half', x:50, y:22, scale:0.92},
+              {type:'circle', x:50, y:49, scale:0.78},
+              {type:'quarter', x:28, y:75, rotate:180, scale:0.84},
+              {type:'quarter', x:72, y:75, rotate:-90, scale:0.84}
+            ],
+            reasoning:'There are 1 whole round cake, 1 half cake, and 2 quarter cakes. So the number of half cakes is 1.',
+            hint:'A half cake looks like half of a whole circle.'
+          },
+          {
+            playMode:'count-figure',
+            prompt:'How many whole round cakes can you find?',
+            orderReminder:'Count the whole round cakes.',
+            help:'Look at the cake figure. Count only the whole round cakes.',
+            countHelp:'Look carefully at the cake figure. Count only the whole round cakes.',
+            customerText:'The baker stacked a little cake display. How many whole round cakes can you find?',
+            options:countChoices,
+            correct:'3',
+            figure:[
+              {type:'circle', x:50, y:12, scale:0.42},
+              {type:'quarter', x:50, y:33, rotate:90, scale:0.76},
+              {type:'half', x:50, y:58, scale:0.9},
+              {type:'circle', x:25, y:82, scale:0.42},
+              {type:'circle', x:75, y:82, scale:0.42}
+            ],
+            reasoning:'There are 3 whole round cakes, 1 half cake, and 1 quarter cake. So the number of whole round cakes is 3.',
+            hint:'Count only the full round cakes, not the half cake or quarter cake.'
+          },
+          {
+            playMode:'count-figure',
+            prompt:'How many quarter cakes can you find?',
+            orderReminder:'Count the quarter cakes.',
+            help:'Look at the cake figure. Count only the quarter cakes.',
+            countHelp:'Look carefully at the cake figure. Count only the quarter cakes.',
+            customerText:'The baker used cake pieces to make a flower display. How many quarter cakes can you find?',
+            options:countChoices,
+            correct:'3',
+            figure:[
+              {type:'quarter', x:50, y:18, rotate:270, scale:0.82},
+              {type:'circle', x:50, y:48, scale:0.72},
+              {type:'quarter', x:24, y:76, rotate:180, scale:0.86},
+              {type:'quarter', x:76, y:76, rotate:-90, scale:0.86}
+            ],
+            reasoning:'There are 1 whole round cake, 0 half cakes, and 3 quarter cakes. So the number of quarter cakes is 3.',
+            hint:'Look for the small quarter-circle cake pieces around the middle.'
+          }
+        ];
+      }
+
+      if(level === 5){
+        return [
+        {
+          playMode:'composite-shapes',
+          multiSelect:true,
+          selectionLimit:2,
+          prompt:'Which 2 cake shapes make this composite cake?',
+          orderReminder:'Choose 2 shapes. Look at the red line.',
+          help:'Tap 2 shape names, then press Check.',
+          countHelp:'Look at the red line. It shows where the composite cake is split into 2 shapes.',
+          customerText:'The baker made a special sign cake. Which 2 cake shapes can you see?',
+          options:compositeShapeOptions(),
+          correct:['square','triangle'],
+          compositeId:'house',
+          reasoning:'The composite cake is made from a square and a triangle.',
+          hint:'Look at the red line. It separates the square base from the triangle top.'
+        },
+        {
+          playMode:'composite-shapes',
+          multiSelect:true,
+          selectionLimit:2,
+          prompt:'Which 2 cake shapes make this composite cake?',
+          orderReminder:'Choose 2 shapes. Look at the red line.',
+          help:'Tap 2 shape names, then press Check.',
+          countHelp:'Look at the red line. It shows where the composite cake is split into 2 shapes.',
+          customerText:'The baker made a dome cake sign. Which 2 cake shapes can you see?',
+          options:compositeShapeOptions(),
+          correct:['half-circle','rectangle'],
+          compositeId:'arch',
+          reasoning:'The composite cake is made from a half circle and a rectangle.',
+          hint:'The top is half of a circle. The bottom is a rectangle.'
+        },
+        {
+          playMode:'composite-shapes',
+          multiSelect:true,
+          selectionLimit:2,
+          prompt:'Which 2 cake shapes make this composite cake?',
+          orderReminder:'Choose 2 shapes. Look at the red line.',
+          help:'Tap 2 shape names, then press Check.',
+          countHelp:'Look at the red line. It shows where the composite cake is split into 2 shapes.',
+          customerText:'The baker made a sail cake sign. Which 2 cake shapes can you see?',
+          options:compositeShapeOptions(),
+          correct:['triangle','quarter-circle'],
+          compositeId:'sail',
+          reasoning:'The composite cake is made from a triangle and a quarter circle.',
+          hint:'One shape is a triangle. The other shape is a quarter circle.'
+        },
+        {
+          playMode:'composite-shapes',
+          multiSelect:true,
+          selectionLimit:2,
+          prompt:'Which 2 cake shapes make this composite cake?',
+          orderReminder:'Choose 2 shapes. Look at the red line.',
+          help:'Tap 2 shape names, then press Check.',
+          countHelp:'Look at the red line. It shows where the composite cake is split into 2 shapes.',
+          customerText:'The baker made a tilted cake sign. Which 2 cake shapes can you see?',
+          options:compositeShapeOptions(),
+          correct:['rectangle','square'],
+          compositeId:'tilted',
+          reasoning:'The composite cake is made from a rectangle and a square.',
+          hint:'Look for 1 long rectangle and 1 square.'
+        }
+      ];
+      }
+
+      if(level === 6){
+        return [
+          {
+            playMode:'shape-recognition',
+            prompt:'Bonus Round 1: Bake a circle cake.',
+            help:'Tap the matching cake shape.',
+            customerText:'Bonus round! First, please bake a circle cake for me!',
+            options:shuffle(['square','rectangle','triangle','circle'].map(optionShape)),
+            correct:'circle',
+            reasoning:'A circle is round all the way around.',
+            hint:'Look for the round cake.'
+          },
+          {
+            playMode:'shape-recognition',
+            prompt:'Bonus Round 2: Which cake should the baker choose?',
+            help:'Listen to the customer’s description, then tap the correct cake shape.',
+            orderReminder:'4 equal sides • 4 corners • 4 vertices',
+            customerText:'Bonus round! Please make me a cake with 4 equal sides, 4 corners, and 4 vertices.',
+            options:shuffle(['square','rectangle','triangle','circle'].map(optionShape)),
+            correct:'square',
+            reasoning:'The baker should choose the square cake. It has 4 equal sides, 4 corners, and 4 vertices.',
+            hint:'All 4 sides are equal. Each corner is a vertex.'
+          },
+          {
+            playMode:'grouping',
+            prompt:'Bonus Round 3: How did the baker group the cakes?',
+            help:'Choose shape, size, colour, or number of sides and vertices.',
+            countHelp:'Look at whether the cakes are big or small.',
+            customerText:'Bonus round! The baker sorted big celebration cakes into one tray and tiny sample cakes into another. What is the rule?',
+            options:[
+              categoryOption('shape'),
+              categoryOption('size'),
+              categoryOption('colour'),
+              categoryOption('number-of-sides-and-vertices')
+            ],
+            correct:'size',
+            grouping:{
+              left:[
+                {shape:'rectangle', size:'large', style:'filled', rotate:4},
+                {shape:'triangle', size:'large', style:'filled', rotate:0},
+                {shape:'circle', size:'large', style:'filled', rotate:0},
+                {shape:'square', size:'large', style:'filled', rotate:8}
+              ],
+              right:[
+                {shape:'circle', size:'small', style:'filled', rotate:0},
+                {shape:'square', size:'small', style:'filled', rotate:6},
+                {shape:'rectangle', size:'small', style:'filled', rotate:-22},
+                {shape:'triangle', size:'small', style:'filled', rotate:-10}
+              ]
+            },
+            reasoning:'The cakes are grouped by size. One tray has big cakes. The other tray has small cakes.',
+            hint:'Look at how big each cake is, not at the shape.'
+          },
+          {
+            playMode:'count-figure',
+            prompt:'Bonus Round 4: How many whole round cakes can you find?',
+            orderReminder:'Count the whole round cakes.',
+            help:'Look at the cake figure. Count only the whole round cakes.',
+            countHelp:'Look carefully at the cake figure. Count only the whole round cakes.',
+            customerText:'Bonus round! The baker stacked a little cake display. How many whole round cakes can you find?',
+            options:numberOptions(3),
+            correct:'3',
+            figure:[
+              {type:'circle', x:50, y:12, scale:0.42},
+              {type:'quarter', x:50, y:33, rotate:90, scale:0.76},
+              {type:'half', x:50, y:58, scale:0.9},
+              {type:'circle', x:25, y:82, scale:0.42},
+              {type:'circle', x:75, y:82, scale:0.42}
+            ],
+            reasoning:'There are 3 whole round cakes, 1 half cake, and 1 quarter cake. So the number of whole round cakes is 3.',
+            hint:'Count only the full round cakes, not the half cake or quarter cake.'
+          },
+          {
+            playMode:'composite-shapes',
+            multiSelect:true,
+            selectionLimit:2,
+            prompt:'Bonus Round 5: Which 2 cake shapes make this composite cake?',
+            orderReminder:'Choose 2 shapes. Look at the red line.',
+            help:'Tap 2 shape names, then press Check.',
+            countHelp:'Look at the red line. It shows where the composite cake is split into 2 shapes.',
+            customerText:'Final bonus round! Which 2 cake shapes can you see in this composite cake?',
+            options:compositeShapeOptions(),
+            correct:['square','triangle'],
+            compositeId:'house',
+            reasoning:'The composite cake is made from a square and a triangle.',
+            hint:'Look at the red line. It separates the square base from the triangle top.'
+          }
+        ];
+      }
+    }
+
+    function setCustomerArt(){
+      const src = randomFrom(customerImageFiles);
+      setAvatarImage(customerAvatar, src, 'Cute customer');
+      customerBadge.textContent = randomFrom(customerBadges);
+    }
+
+    function setSellerArt(state){
+      if(state === 'good'){
+        setAvatarImage(sellerAvatar, sellerImageFiles.good, 'Happy baker');
+        sellerBadge.textContent = 'Proud Baker';
+        setMiniSellerImage(sellerImageFiles.good, 'Happy baker', 'good');
+      }else if(state === 'bad'){
+        setAvatarImage(sellerAvatar, sellerImageFiles.bad, 'Trying again baker');
+        sellerBadge.textContent = 'Trying Again';
+        setMiniSellerImage(sellerImageFiles.bad, 'Trying again baker', 'bad');
+      }else{
+        setAvatarImage(sellerAvatar, sellerImageFiles.neutral, 'Cake baker');
+        sellerBadge.textContent = 'Cake Baker';
+        setMiniSellerImage(sellerImageFiles.neutral, 'Cake baker');
+      }
+    }
+
+    function showReasoning(isCorrect, line){
+      reasoningPanel.className = 'reasoning-panel show' + (isCorrect ? '' : ' bad');
+      reasoningTitle.textContent = isCorrect ? 'Yes! Here is the big idea.' : 'Let’s fix it gently.';
+      reasoningLine.textContent = line;
+    }
+
+    function hideReasoning(){
+      reasoningPanel.className = 'reasoning-panel';
+      reasoningTitle.textContent = '';
+      reasoningLine.textContent = '';
+    }
+
+    function getCurrentLevelConfig(){
+      return levelConfigs[currentLevel];
+    }
+
+    function currentQuestionNumber(){
+      return currentQuestionIndex + 1;
+    }
+
+    function updateTop(){
+      const cfg = getCurrentLevelConfig();
+      levelText.textContent = String(currentLevel);
+      qNumText.textContent = String(currentQuestion ? currentQuestionNumber() : 1);
+      qTotalText.textContent = String(currentQuestions.length || 4);
+      roundScoreText.textContent = String(currentRoundScore);
+      totalScoreText.textContent = String(totalScore);
+      goalText.textContent = cfg.goal;
+      missionLine.textContent = cfg.mission;
+      const done = currentQuestion ? (questionResolved ? currentQuestionNumber() : currentQuestionNumber() - 1) : 0;
+      progressFill.style.width = ((done / Math.max(currentQuestions.length,1)) * 100) + '%';
+      nextBtn.textContent = currentQuestionIndex >= currentQuestions.length - 1 ? '🏁 Finish' : '➡ Next';
+    }
+
+    function renderTickets(){
+      ticketsRow.innerHTML = '';
+      for(let i = 0; i < currentQuestions.length; i++){
+        const div = document.createElement('div');
+        div.className = 'ticket';
+        div.id = 'ticket-' + i;
+        div.textContent = i + 1;
+        ticketsRow.appendChild(div);
+      }
+    }
+
+    function markTicket(correct){
+      const ticket = document.getElementById('ticket-' + currentQuestionIndex);
+      if(!ticket) return;
+      ticket.className = 'ticket ' + (correct ? 'correct' : 'wrong');
+      ticket.textContent = correct ? '✓' : '✕';
+    }
+
+    function setStep(step){
+      currentStep = Math.max(1, Math.min(3, step));
+      frame1.classList.toggle('active', currentStep === 1);
+      frame2.classList.toggle('active', currentStep === 2);
+      frame3.classList.toggle('active', currentStep === 3);
+      pill1.classList.toggle('active', currentStep === 1);
+      pill2.classList.toggle('active', currentStep === 2);
+      pill3.classList.toggle('active', currentStep === 3);
+      backBtn.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+
+      if(currentStep === 1) forwardBtn.textContent = 'Go to Bake ➡';
+      else if(currentStep === 2) forwardBtn.textContent = questionResolved ? 'See Baker ➡' : 'Check First';
+      else forwardBtn.textContent = questionResolved
+        ? (currentQuestionIndex >= currentQuestions.length - 1 ? 'Finish Level ➡' : 'Next Order ➡')
+        : 'Back to Order ➡';
+    }
+
+    function updateChosenAnswer(){
+      if(!currentQuestion){
+        chosenBubble.textContent = '?';
+        chosenText.textContent = '—';
+        servedLine.textContent = '';
+        return;
+      }
+
+      if(isMultiSelectQuestion()){
+        const selectedKeys = getSelectedKeys();
+        const limit = currentQuestion.selectionLimit || 2;
+        if(!selectedKeys.length){
+          chosenBubble.textContent = '0/' + limit;
+          chosenText.textContent = '—';
+          servedLine.textContent = 'Choose ' + limit + ' shapes.';
+          return;
+        }
+        chosenBubble.textContent = selectedKeys.length + '/' + limit;
+        chosenText.textContent = formatOptionLabels(selectedKeys);
+        servedLine.textContent = selectedKeys.length === limit ? 'Choices ready.' : 'Choose ' + (limit - selectedKeys.length) + ' more.';
+        return;
+      }
+
+      if(!selectedAnswer){
+        chosenBubble.textContent = '?';
+        chosenText.textContent = '—';
+        servedLine.textContent = currentQuestion.playMode === 'shape-recognition'
+          ? 'Tap the cake shape.'
+          : 'Tap one answer.';
+        return;
+      }
+
+      const opt = getOptionByKey(selectedAnswer);
+      chosenBubble.textContent = opt ? opt.short : selectedAnswer;
+      chosenText.textContent = opt ? opt.label : selectedAnswer;
+      servedLine.textContent = 'Choice ready.';
+    }
+
+    function getOptionByKey(key){
+      return currentQuestion?.options?.find(opt => opt.key === key) || null;
+    }
+
+    function frostingDots(){
+      return `
+        <circle cx="48" cy="40" r="3" fill="#fff"/>
+        <circle cx="62" cy="34" r="3" fill="#ff6ba3"/>
+        <circle cx="76" cy="38" r="3" fill="#ffd452"/>
+        <circle cx="90" cy="34" r="3" fill="#68c2ff"/>
+        <circle cx="104" cy="40" r="3" fill="#8adf84"/>
+      `;
+    }
+
+    function cakeShapeSVG(shape, className){
+      const meta = SHAPE_META[shape];
+      const shadow = `<ellipse cx="80" cy="120" rx="44" ry="10" fill="rgba(138,76,43,.12)"></ellipse>`;
+      if(shape === 'square'){
+        return `
+          <svg viewBox="0 0 160 140" class="${className || ''}" aria-hidden="true">
+            ${shadow}
+            <rect x="34" y="52" width="92" height="54" rx="10" fill="${meta.color}" stroke="#8a4c2b" stroke-width="4"/>
+            <rect x="30" y="36" width="100" height="24" rx="12" fill="${meta.icing}" stroke="#8a4c2b" stroke-width="4"/>
+            ${frostingDots()}
+          </svg>`;
+      }
+      if(shape === 'rectangle'){
+        return `
+          <svg viewBox="0 0 160 140" class="${className || ''}" aria-hidden="true">
+            ${shadow}
+            <rect x="22" y="56" width="116" height="48" rx="10" fill="${meta.color}" stroke="#8a4c2b" stroke-width="4"/>
+            <rect x="18" y="40" width="124" height="22" rx="12" fill="${meta.icing}" stroke="#8a4c2b" stroke-width="4"/>
+            ${frostingDots()}
+          </svg>`;
+      }
+      if(shape === 'triangle'){
+        return `
+          <svg viewBox="0 0 160 140" class="${className || ''}" aria-hidden="true">
+            ${shadow}
+            <polygon points="80,30 134,108 26,108" fill="${meta.color}" stroke="#8a4c2b" stroke-width="4" stroke-linejoin="round"/>
+            <path d="M80 26 L142 114 L18 114 Z" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="4"/>
+            <path d="M63 55 L97 55 L112 76 L48 76 Z" fill="${meta.icing}" stroke="#8a4c2b" stroke-width="4" stroke-linejoin="round"/>
+            <circle cx="80" cy="46" r="6" fill="#ff6ba3" stroke="#8a4c2b" stroke-width="3"/>
+          </svg>`;
+      }
+      if(shape === 'circle'){
+        return `
+          <svg viewBox="0 0 160 140" class="${className || ''}" aria-hidden="true">
+            ${shadow}
+            <circle cx="80" cy="76" r="42" fill="${meta.color}" stroke="#8a4c2b" stroke-width="4"/>
+            <path d="M42 70 C48 44 112 44 118 70" fill="none" stroke="${meta.icing}" stroke-width="16" stroke-linecap="round"/>
+            ${frostingDots()}
+          </svg>`;
+      }
+      if(shape === 'half'){
+        return `
+          <svg viewBox="0 0 160 140" class="${className || ''}" aria-hidden="true">
+            <ellipse cx="80" cy="120" rx="48" ry="10" fill="rgba(138,76,43,.12)"></ellipse>
+            <path d="M30 96 A50 50 0 0 1 130 96 L130 108 L30 108 Z" fill="${meta.color}" stroke="#8a4c2b" stroke-width="4"/>
+            <path d="M38 92 A42 42 0 0 1 122 92" fill="none" stroke="${meta.icing}" stroke-width="14" stroke-linecap="round"/>
+            <circle cx="60" cy="78" r="3" fill="#ff6ba3"/>
+            <circle cx="78" cy="70" r="3" fill="#ffd452"/>
+            <circle cx="96" cy="78" r="3" fill="#68c2ff"/>
+          </svg>`;
+      }
+      return `
+        <svg viewBox="0 0 160 140" class="${className || ''}" aria-hidden="true">
+          <ellipse cx="80" cy="120" rx="40" ry="10" fill="rgba(138,76,43,.12)"></ellipse>
+          <path d="M42 110 A68 68 0 0 1 110 42 L110 110 Z" fill="${meta.color}" stroke="#8a4c2b" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M52 100 A50 50 0 0 1 100 52" fill="none" stroke="${meta.icing}" stroke-width="14" stroke-linecap="round"/>
+          <circle cx="74" cy="74" r="3" fill="#ff6ba3"/>
+          <circle cx="88" cy="66" r="3" fill="#ffd452"/>
+          <circle cx="94" cy="82" r="3" fill="#68c2ff"/>
+        </svg>`;
+    }
+
+    function cakeShapeVisual(shape, wrapperClass=''){
+      const src = CAKE_ASSETS[shape];
+      const label = SHAPE_META[shape]?.label || shape;
+      return `
+        <div class="cake-art-wrap ${wrapperClass}">
+          <img
+            src="${src}"
+            alt="${label}"
+            class="cake-art-img"
+            onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"
+          >
+          <div class="cake-art-fallback">${cakeShapeSVG(shape, 'fallback-svg')}</div>
+        </div>
+      `;
+    }
+
+    function pieceVisual(type, wrapperClass=''){
+      if(type === 'whole') return cakeShapeVisual('circle', wrapperClass);
+      if(type === 'half') return cakeShapeVisual('half', wrapperClass);
+      return cakeShapeVisual('quarter', wrapperClass);
+    }
+
+    function assemblyVisual(type){
+      if(type === 'two-halves'){
+        return `
+          <div class="assembly-cake-wrap halves">
+            ${pieceVisual('half', 'assembly-piece-wrap')}
+            ${pieceVisual('half', 'assembly-piece-wrap')}
+          </div>
+        `;
+      }
+
+      if(type === 'four-quarters'){
+        return `
+          <div class="assembly-cake-wrap quarters">
+            ${pieceVisual('quarter', 'assembly-piece-wrap')}
+            ${pieceVisual('quarter', 'assembly-piece-wrap')}
+            ${pieceVisual('quarter', 'assembly-piece-wrap')}
+            ${pieceVisual('quarter', 'assembly-piece-wrap')}
+          </div>
+        `;
+      }
+
+      if(type === 'one-half'){
+        return `
+          <div class="assembly-cake-wrap single">
+            ${pieceVisual('half', 'assembly-piece-wrap')}
+          </div>
+        `;
+      }
+
+      return `
+        <div class="assembly-cake-wrap three">
+          ${pieceVisual('quarter', 'assembly-piece-wrap')}
+          ${pieceVisual('quarter', 'assembly-piece-wrap')}
+          ${pieceVisual('quarter', 'assembly-piece-wrap')}
+          <div class="assembly-gap"></div>
+        </div>
+      `;
+    }
+
+    function objectSVG(object){
+      if(object.key === 'cake-box'){
+        return `
+          <svg viewBox="0 0 200 150" class="object-svg" aria-hidden="true">
+            <rect x="55" y="42" width="90" height="72" rx="16" fill="#ffd5ea" stroke="#8a4c2b" stroke-width="5"/>
+            <rect x="90" y="42" width="20" height="72" fill="#fff0f6" stroke="#8a4c2b" stroke-width="5"/>
+            <rect x="55" y="72" width="90" height="12" fill="#fff0f6" stroke="#8a4c2b" stroke-width="5"/>
+            <circle cx="100" cy="58" r="12" fill="#ff8fbd" stroke="#8a4c2b" stroke-width="4"/>
+          </svg>`;
+      }
+      if(object.key === 'cake-tray'){
+        return `
+          <svg viewBox="0 0 200 150" class="object-svg" aria-hidden="true">
+            <rect x="35" y="58" width="130" height="42" rx="14" fill="#c8f4e8" stroke="#8a4c2b" stroke-width="5"/>
+            <rect x="25" y="100" width="150" height="10" rx="5" fill="#8a4c2b"/>
+            <circle cx="65" cy="56" r="10" fill="#ff9ec9"/>
+            <circle cx="100" cy="50" r="12" fill="#ffe166"/>
+            <circle cx="135" cy="56" r="10" fill="#9cd7ff"/>
+          </svg>`;
+      }
+      if(object.key === 'cake-slice'){
+        return `
+          <svg viewBox="0 0 200 150" class="object-svg" aria-hidden="true">
+            <polygon points="46,112 100,38 154,112" fill="#ffe39d" stroke="#8a4c2b" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M84 62 L116 62 L128 78 L72 78 Z" fill="#ff9ec9" stroke="#8a4c2b" stroke-width="5" stroke-linejoin="round"/>
+            <circle cx="100" cy="52" r="7" fill="#ff5b8f" stroke="#8a4c2b" stroke-width="4"/>
+          </svg>`;
+      }
+      if(object.key === 'round-cookie'){
+        return `
+          <svg viewBox="0 0 200 150" class="object-svg" aria-hidden="true">
+            <circle cx="100" cy="76" r="42" fill="#e9c17b" stroke="#8a4c2b" stroke-width="5"/>
+            <circle cx="82" cy="64" r="5" fill="#8a4c2b"/>
+            <circle cx="111" cy="58" r="6" fill="#8a4c2b"/>
+            <circle cx="120" cy="84" r="5" fill="#8a4c2b"/>
+            <circle cx="88" cy="90" r="6" fill="#8a4c2b"/>
+          </svg>`;
+      }
+      if(object.key === 'half-moon-pie'){
+        return `
+          <svg viewBox="0 0 200 150" class="object-svg" aria-hidden="true">
+            <path d="M42 96 A58 58 0 0 1 158 96 L158 110 L42 110 Z" fill="#ffc78a" stroke="#8a4c2b" stroke-width="5"/>
+            <path d="M52 92 A48 48 0 0 1 148 92" fill="none" stroke="#fff1bf" stroke-width="8" stroke-linecap="round"/>
+            <path d="M44 102 Q56 90 68 102 T92 102 T116 102 T140 102 T156 102" fill="none" stroke="#8a4c2b" stroke-width="4"/>
+          </svg>`;
+      }
+      return `
+        <svg viewBox="0 0 200 150" class="object-svg" aria-hidden="true">
+          <path d="M56 112 A68 68 0 0 1 124 44 L124 112 Z" fill="#ffcb6d" stroke="#8a4c2b" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M72 100 A52 52 0 0 1 112 60" fill="none" stroke="#fff4b2" stroke-width="9" stroke-linecap="round"/>
+          <path d="M82 84 L116 84" stroke="#ff9a00" stroke-width="4" stroke-linecap="round"/>
+          <path d="M92 72 L108 72" stroke="#ff9a00" stroke-width="4" stroke-linecap="round"/>
+        </svg>`;
+    }
+
+    function cutCakeSVG(type){
+      const base = `
+        <circle cx="100" cy="76" r="46" fill="#ffd5ea" stroke="#8a4c2b" stroke-width="5"></circle>
+        <path d="M58 68 C68 42 132 42 142 68" fill="none" stroke="#ff8fbd" stroke-width="16" stroke-linecap="round"></path>
+        <circle cx="72" cy="62" r="3.5" fill="#fff"></circle>
+        <circle cx="90" cy="56" r="3.5" fill="#68c2ff"></circle>
+        <circle cx="108" cy="62" r="3.5" fill="#ffd452"></circle>
+        <circle cx="126" cy="56" r="3.5" fill="#8adf84"></circle>
+      `;
+      let lines = '';
+      if(type === 'half'){
+        lines = `<line x1="100" y1="28" x2="100" y2="124" stroke="#8a4c2b" stroke-width="6" stroke-linecap="round" stroke-dasharray="6 6"></line>`;
+      } else if(type === 'quarter'){
+        lines = `
+          <line x1="100" y1="28" x2="100" y2="124" stroke="#8a4c2b" stroke-width="6" stroke-linecap="round" stroke-dasharray="6 6"></line>
+          <line x1="52" y1="76" x2="148" y2="76" stroke="#8a4c2b" stroke-width="6" stroke-linecap="round" stroke-dasharray="6 6"></line>
+        `;
+      } else if(type === 'uneven'){
+        lines = `<path d="M82 28 C118 48 72 82 120 124" fill="none" stroke="#b42318" stroke-width="6" stroke-linecap="round" stroke-dasharray="6 6"></path>`;
+      }
+      return `
+        <svg viewBox="0 0 200 150" class="cut-svg plate-shadow" aria-hidden="true">
+          <ellipse cx="100" cy="132" rx="56" ry="10" fill="rgba(138,76,43,.12)"></ellipse>
+          ${base}
+          ${lines}
+        </svg>`;
+    }
+
+    function comboSVG(type){
+      if(type === 'two-halves'){
+        return `
+          <svg viewBox="0 0 180 120" class="mini-svg" aria-hidden="true">
+            <path d="M38 82 A28 28 0 0 1 94 82 L94 92 L38 92 Z" fill="#ffd5b8" stroke="#8a4c2b" stroke-width="4"></path>
+            <path d="M142 36 A28 28 0 0 0 86 36 L86 46 L142 46 Z" fill="#ffd5b8" stroke="#8a4c2b" stroke-width="4"></path>
+          </svg>`;
+      }
+      if(type === 'four-quarters'){
+        return `
+          <svg viewBox="0 0 180 120" class="mini-svg" aria-hidden="true">
+            <path d="M56 84 A24 24 0 0 1 80 60 L80 84 Z" fill="#ffd4a7" stroke="#8a4c2b" stroke-width="4"></path>
+            <path d="M124 60 A24 24 0 0 1 100 84 L124 84 Z" fill="#ffd4a7" stroke="#8a4c2b" stroke-width="4"></path>
+            <path d="M80 36 A24 24 0 0 1 56 60 L80 60 Z" fill="#ffd4a7" stroke="#8a4c2b" stroke-width="4"></path>
+            <path d="M100 36 A24 24 0 0 1 124 60 L100 60 Z" fill="#ffd4a7" stroke="#8a4c2b" stroke-width="4"></path>
+          </svg>`;
+      }
+      if(type === 'one-half'){
+        return `
+          <svg viewBox="0 0 180 120" class="mini-svg" aria-hidden="true">
+            <path d="M48 84 A42 42 0 0 1 132 84 L132 98 L48 98 Z" fill="#ffd5b8" stroke="#8a4c2b" stroke-width="4"></path>
+          </svg>`;
+      }
+      return `
+        <svg viewBox="0 0 180 120" class="mini-svg" aria-hidden="true">
+          <path d="M58 82 A24 24 0 0 1 82 58 L82 82 Z" fill="#ffd4a7" stroke="#8a4c2b" stroke-width="4"></path>
+          <path d="M122 58 A24 24 0 0 1 98 82 L122 82 Z" fill="#ffd4a7" stroke="#8a4c2b" stroke-width="4"></path>
+          <path d="M82 34 A24 24 0 0 1 58 58 L82 58 Z" fill="#ffd4a7" stroke="#8a4c2b" stroke-width="4"></path>
+        </svg>`;
+    }
+
+    function groupingShapeSVG(item){
+      const fill = item.style === 'outline' ? '#fffdfb' : '#ffb3cf';
+      const stroke = '#ef7aa8';
+      const sizeScale = item.size === 'small' ? 0.62 : item.size === 'large' ? 1.08 : 0.84;
+      let shape = '';
+      if(item.shape === 'circle'){
+        shape = `<circle cx="50" cy="50" r="20" fill="${fill}" stroke="${stroke}" stroke-width="4"></circle>`;
+      }else if(item.shape === 'square'){
+        shape = `<rect x="30" y="30" width="40" height="40" fill="${fill}" stroke="${stroke}" stroke-width="4"></rect>`;
+      }else if(item.shape === 'rectangle'){
+        shape = `<rect x="20" y="35" width="60" height="30" fill="${fill}" stroke="${stroke}" stroke-width="4"></rect>`;
+      }else{
+        shape = `<polygon points="50,22 76,72 24,72" fill="${fill}" stroke="${stroke}" stroke-width="4" stroke-linejoin="round"></polygon>`;
+      }
+      return `
+        <div class="grouping-item" style="--rot:${item.rotate || 0}deg;--scale:${sizeScale};">
+          <svg viewBox="0 0 100 100" class="grouping-svg" aria-hidden="true">
+            ${shape}
+          </svg>
+        </div>
+      `;
+    }
+
+    function groupingTrayHTML(title, items){
+      return `
+        <div class="grouping-tray">
+          <div class="grouping-tray-label">${title}</div>
+          ${items.map(groupingShapeSVG).join('')}
+        </div>
+      `;
+    }
+
+    function groupingVisual(grouping){
+      return `
+        <div class="grouping-panel">
+          <div class="grouping-caption">Two cake trays are shown below.</div>
+          <div class="grouping-trays">
+            ${groupingTrayHTML('Tray A', grouping.left)}
+            ${groupingTrayHTML('Tray B', grouping.right)}
+          </div>
+        </div>
+      `;
+    }
+
+    function countFigurePieceHTML(type){
+      const shape = type === 'circle' ? 'circle' : type === 'half' ? 'half' : 'quarter';
+      return cakeShapeVisual(shape, 'count-piece-wrap');
+    }
+
+    function countFigureHTML(items){
+      return `
+        <div class="count-figure-panel">
+          <div class="count-figure-caption">Count the cake parts in the figure below.</div>
+          <div class="count-figure-board">
+            ${items.map(item => `
+              <div
+                class="count-figure-piece ${item.type}"
+                style="left:${item.x}%;top:${item.y}%;--rot:${item.rotate || 0}deg;--scale:${item.scale || 1};"
+              >
+                ${countFigurePieceHTML(item.type)}
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function optionVisual(opt){
+      if(!opt.visual) return '';
+      if(opt.visual.kind === 'shape'){
+        return cakeShapeVisual(opt.visual.value, 'mini-cake-wrap');
+      }
+      if(opt.visual.kind === 'piece'){
+        return pieceVisual(opt.visual.value, 'mini-cake-wrap');
+      }
+      if(opt.visual.kind === 'cut'){
+        return cutCakeSVG(opt.visual.value).replace('class="cut-svg plate-shadow"', 'class="mini-svg"');
+      }
+      return comboSVG(opt.visual.value);
+    }
+
+    function renderOptionButton(opt){
+      const shapeOnly = currentQuestion && currentQuestion.playMode === 'shape-recognition';
+      const textOnly = !opt.visual;
+      const selectedKeys = getSelectedKeys();
+      const isSelected = selectedKeys.includes(opt.key);
+      const revealCorrect = questionResolved && isCorrectOptionKey(opt.key);
+      const revealWrong = questionResolved && isSelected && !isCorrectOptionKey(opt.key);
+      return `
+        <button
+          type="button"
+          class="option-btn ${isSelected ? 'active' : ''} ${shapeOnly ? 'shape-only' : ''} ${textOnly ? 'text-only' : ''} ${revealCorrect ? 'correct-answer' : ''} ${revealWrong ? 'wrong-answer' : ''}"
+          data-option="${opt.key}"
+        >
+          ${textOnly ? '' : `<div class="icon">${optionVisual(opt)}</div>`}
+          ${shapeOnly ? '' : `<div class="label">${opt.label}</div>`}
+        </button>
+      `;
+    }
+
+    function stageSparkles(){
+      return `
+        <div class="sparkle" style="left:12%;top:18%;animation-delay:0s;">✨</div>
+        <div class="sparkle" style="left:80%;top:22%;animation-delay:.08s;">⭐</div>
+        <div class="sparkle" style="left:22%;top:72%;animation-delay:.16s;">✨</div>
+        <div class="sparkle" style="left:72%;top:70%;animation-delay:.24s;">⭐</div>
+      `;
+    }
+
+    function compositeFigureSVG(id){
+      if(id === 'house'){
+        return `
+          <svg viewBox="0 0 220 180" class="composite-svg" aria-hidden="true">
+            <polygon class="composite-fill" points="110,40 160,90 60,90"></polygon>
+            <rect class="composite-fill" x="80" y="90" width="60" height="60"></rect>
+            <line class="composite-line" x1="60" y1="90" x2="160" y2="90"></line>
+          </svg>
+        `;
+      }
+      if(id === 'arch'){
+        return `
+          <svg viewBox="0 0 220 180" class="composite-svg" aria-hidden="true">
+            <path class="composite-fill" d="M62 96 A48 48 0 0 1 158 96 L158 142 L62 142 Z"></path>
+            <rect class="composite-fill" x="62" y="96" width="96" height="46"></rect>
+            <line class="composite-line" x1="62" y1="96" x2="158" y2="96"></line>
+          </svg>
+        `;
+      }
+      if(id === 'sail'){
+        return `
+          <svg viewBox="0 0 220 180" class="composite-svg" aria-hidden="true">
+            <polygon class="composite-fill" points="40,128 100,68 100,128"></polygon>
+            <path class="composite-fill" d="M100 68 L160 68 Q160 128 100 128 Z"></path>
+            <line class="composite-line" x1="100" y1="68" x2="100" y2="128"></line>
+          </svg>
+        `;
+      }
+      return `
+        <svg viewBox="0 0 220 180" class="composite-svg" aria-hidden="true">
+          <g transform="translate(112 82) rotate(-45)">
+            <rect class="composite-fill" x="-13" y="-2" width="26" height="92"></rect>
+            <rect class="composite-fill" x="-24" y="-50" width="48" height="48"></rect>
+            <line class="composite-line" x1="-13" y1="-2" x2="13" y2="-2"></line>
+          </g>
+        </svg>
+      `;
+    }
+
+    function renderPlayStage(){
+      if(!currentQuestion){
+        playStage.className = 'play-stage';
+        playStage.style.display = 'flex';
+        playStage.innerHTML = '';
+        return;
+      }
+
+      if(currentQuestion.playMode === 'shape-recognition'){
+        playStage.className = 'play-stage hidden';
+        playStage.innerHTML = '';
+        return;
+      }
+
+      playStage.style.display = 'flex';
+      playStage.className = 'play-stage' + (stageState === 'good' ? ' good' : stageState === 'bad' ? ' bad' : '');
+
+      let html = '';
+
+      if(currentQuestion.playMode === 'object-match'){
+        html = `
+          <div class="object-panel">
+            <div class="object-card">
+              ${objectSVG(currentQuestion.object)}
+              <div class="object-name">${currentQuestion.object.label}</div>
+              <div class="object-hint">Which shape matches this object?</div>
+            </div>
+          </div>
+        `;
+      } else if(currentQuestion.playMode === 'grouping'){
+        html = groupingVisual(currentQuestion.grouping);
+      } else if(currentQuestion.playMode === 'cut'){
+        const preview = selectedAnswer || 'circle';
+        html = `
+          <div class="cut-panel">
+            <div class="cut-caption">${currentQuestion.prompt}</div>
+            ${preview === 'uneven'
+              ? cutCakeSVG('uneven')
+              : cakeShapeVisual(preview === 'circle' ? 'circle' : preview, 'cut-cake-wrap')}
+            <div class="equal-note">
+              ${preview === 'uneven'
+                ? 'These parts are not equal.'
+                : preview === 'quarter'
+                ? 'This cake is cut into 4 equal parts.'
+                : preview === 'half'
+                ? 'This cake is cut into 2 equal parts.'
+                : 'Tap a cut choice below.'}
+            </div>
+          </div>
+        `;
+      } else if(currentQuestion.playMode === 'order-piece'){
+        html = `
+          <div class="piece-panel">
+            <div class="piece-caption">Choose the cake piece for the customer.</div>
+            <div class="piece-choices">
+              ${['whole','half','quarter'].map(key=>`
+                <div class="piece-card ${selectedAnswer === key ? 'selected' : ''}">
+                  ${pieceVisual(key, 'piece-cake-wrap')}
+                  <div class="shape-name">${pieceOption(key).label}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else if(currentQuestion.playMode === 'count-figure'){
+        html = countFigureHTML(currentQuestion.figure);
+      } else if(currentQuestion.playMode === 'composite-shapes'){
+        html = `
+          <div class="composite-panel">
+            <div class="composite-caption">Look at the line. It shows the 2 shapes inside the composite cake.</div>
+            <div class="composite-board">
+              ${compositeFigureSVG(currentQuestion.compositeId)}
+            </div>
+          </div>
+        `;
+      } else if(currentQuestion.playMode === 'build-whole'){
+        const preview = selectedAnswer || currentQuestion.correct;
+        const correct = stageState === 'good';
+        html = `
+          <div class="build-panel">
+            <div class="build-caption">${currentQuestion.prompt}</div>
+            <div class="assembly-board ${correct ? 'good' : ''}">
+              ${assemblyVisual(preview)}
+            </div>
+            <div class="equal-note">
+              ${preview === 'two-halves'
+                ? 'Two halves fit together to make the whole.'
+                : preview === 'four-quarters'
+                ? 'Four quarters fit together to make the whole.'
+                : preview === 'three-quarters'
+                ? 'Three quarters are still missing one quarter.'
+                : 'One half is only part of the whole.'}
+            </div>
+          </div>
+        `;
+      }
+
+      playStage.innerHTML = html + (stageState === 'good' ? stageSparkles() : '');
+    }
+
+    function renderAnswers(){
+      const shapeMode = currentQuestion && currentQuestion.playMode === 'shape-recognition';
+      answerPanel.classList.toggle('shape-mode', !!shapeMode);
+
+      answerGrid.innerHTML = currentQuestion.options.map(renderOptionButton).join('');
+
+      Array.from(answerGrid.querySelectorAll('[data-option]')).forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          if(questionResolved) return;
+          const key = btn.dataset.option;
+          if(isMultiSelectQuestion()){
+            const limit = currentQuestion.selectionLimit || 2;
+            const selectedKeys = getSelectedKeys().slice();
+            const idx = selectedKeys.indexOf(key);
+            if(idx >= 0){
+              selectedKeys.splice(idx, 1);
+            }else if(selectedKeys.length < limit){
+              selectedKeys.push(key);
+            }else{
+              selectedKeys.shift();
+              selectedKeys.push(key);
+            }
+            selectedAnswer = selectedKeys;
+          }else{
+            selectedAnswer = key;
+          }
+          updateChosenAnswer();
+          renderAnswers();
+          renderPlayStage();
+          syncButtons();
+          feedback.className = 'feedback';
+          feedback.textContent = isMultiSelectQuestion()
+            ? 'Choose 2 answers, then press Check.'
+            : 'Choice selected. Press Check when ready.';
+          fallbackTap();
+        });
+      });
+    }
+
+    function syncButtons(){
+      const hasChoice = isMultiSelectQuestion()
+        ? getSelectedKeys().length === (currentQuestion?.selectionLimit || 2)
+        : !!selectedAnswer;
+      const hasAnyChoice = isMultiSelectQuestion()
+        ? getSelectedKeys().length > 0
+        : !!selectedAnswer;
+      checkBtn.disabled = !currentQuestion || questionResolved || !hasChoice;
+      clearBtn.disabled = !currentQuestion || questionResolved || !hasAnyChoice;
+      hintBtn.disabled = !currentQuestion || questionResolved;
+      nextBtn.disabled = !questionResolved;
+      nextBtn.style.display = questionResolved ? '' : 'none';
+    }
+
+    function setSellerReady(){
+      setSellerArt('neutral');
+      sellerSpeech.className = 'speech';
+      sellerSpeech.innerHTML = 'New cake order ready. Read the order, choose the answer, then press <strong>Check</strong>.';
+    }
+
+    function setSellerResult(correct){
+      if(correct){
+        setSellerArt('good');
+        sellerSpeech.className = 'speech good';
+        const answerText = Array.isArray(currentQuestion.correct)
+          ? formatOptionLabels(currentQuestion.correct)
+          : (getOptionByKey(currentQuestion.correct)?.label || currentQuestion.correct);
+        sellerSpeech.innerHTML = `<strong>${funnyCorrectLine()}</strong><br>Correct answer${Array.isArray(currentQuestion.correct) ? 's' : ''}: <strong>${answerText}</strong>.<br>${currentQuestion.reasoning}`;
+      }else{
+        setSellerArt('bad');
+        sellerSpeech.className = 'speech bad';
+        const correctText = Array.isArray(currentQuestion.correct)
+          ? formatOptionLabels(currentQuestion.correct)
+          : (getOptionByKey(currentQuestion.correct)?.label || currentQuestion.correct);
+        sellerSpeech.innerHTML = `<strong>${funnyWrongLine()}</strong><br>The correct answer${Array.isArray(currentQuestion.correct) ? 's are' : ' is'} <strong>${correctText}</strong>.<br>${currentQuestion.reasoning}`;
+      }
+    }
+
+    function loadQuestion(){
+      currentQuestion = currentQuestions[currentQuestionIndex];
+      selectedAnswer = currentQuestion && currentQuestion.multiSelect ? [] : null;
+      questionResolved = false;
+      stageState = 'idle';
+      setCustomerArt();
+
+      customerLine.textContent = currentQuestion.customerText;
+      orderEquation.textContent = currentQuestion.prompt;
+      orderHelp.textContent = currentQuestion.help;
+      countEquation.textContent = currentQuestion.orderReminder || currentQuestion.prompt;
+      countHelp.textContent = currentQuestion.countHelp || (currentQuestion.orderReminder ? 'Use the clues above to choose the correct cake.' : 'Tap an answer, then press Check.');
+
+      updateChosenAnswer();
+      renderPlayStage();
+      renderAnswers();
+      hideReasoning();
+      setSellerReady();
+      syncButtons();
+      updateTop();
+      setStep(1);
+
+      feedback.className = 'feedback';
+      feedback.textContent = 'A new cake order is ready!';
+      playAssetSound(audioOrderBell, fallbackOrderBell);
+      speakCurrentQuestion();
+    }
+
+    function checkAnswer(){
+      if(!currentQuestion || questionResolved) return;
+      stopSpeaking();
+
+      const selectedKeys = getSelectedKeys();
+      if(isMultiSelectQuestion()){
+        const limit = currentQuestion.selectionLimit || 2;
+        if(selectedKeys.length !== limit){
+          feedback.className = 'feedback bad';
+          feedback.textContent = 'Choose ' + limit + ' answers first.';
+          return;
+        }
+      }else if(!selectedAnswer){
+        feedback.className = 'feedback bad';
+        feedback.textContent = 'Choose an answer first.';
+        return;
+      }
+
+      questionResolved = true;
+      const correct = Array.isArray(currentQuestion.correct)
+        ? selectedKeys.length === currentQuestion.correct.length
+          && selectedKeys.every(key => currentQuestion.correct.includes(key))
+        : selectedAnswer === currentQuestion.correct;
+      stageState = correct ? 'good' : 'bad';
+
+      if(correct){
+        currentRoundScore += 1;
+        totalScore += 1;
+        markTicket(true);
+        showReasoning(true, currentQuestion.reasoning);
+        setSellerResult(true);
+        feedback.className = 'feedback good';
+        feedback.textContent = '✅ ' + funnyCorrectLine();
+        playAssetSound(audioCorrect, fallbackCorrect);
+        launchConfetti();
+      }else{
+        markTicket(false);
+        showReasoning(false, currentQuestion.reasoning);
+        setSellerResult(false);
+        feedback.className = 'feedback bad';
+        feedback.textContent = '❌ ' + funnyWrongLine();
+        playAssetSound(audioWrong, fallbackWrong);
+      }
+
+      setBestScore(totalScore);
+      updateTop();
+      renderPlayStage();
+      renderAnswers();
+      syncButtons();
+      setStep(2);
+    }
+
+    function showHint(){
+      if(!currentQuestion || questionResolved) return;
+      stageState = 'idle';
+      showReasoning(false, currentQuestion.hint);
+      feedback.className = 'feedback';
+      feedback.textContent = '💡 Hint shown.';
+      fallbackTap();
+    }
+
+    function clearAnswer(){
+      if(questionResolved) return;
+      selectedAnswer = isMultiSelectQuestion() ? [] : null;
+      updateChosenAnswer();
+      renderAnswers();
+      renderPlayStage();
+      syncButtons();
+      feedback.className = 'feedback';
+      feedback.textContent = 'Choice cleared.';
+      fallbackTap();
+    }
+
+    function nextOrder(){
+      if(!questionResolved){
+        feedback.className = 'feedback';
+        feedback.textContent = 'Finish this order first.';
+        return;
+      }
+
+      currentQuestionIndex += 1;
+      if(currentQuestionIndex >= currentQuestions.length){
+        finishLevel();
+        return;
+      }
+      loadQuestion();
+    }
+
+    function finishLevel(){
+      const cfg = getCurrentLevelConfig();
+      playAssetSound(audioTada, fallbackTada);
+
+      const perfectBonus = currentLevel === 6 && currentRoundScore === currentQuestions.length;
+      if(perfectBonus) secretCakeUnlocked = true;
+
+      roundTitle.textContent =
+        currentLevel === 6
+          ? (perfectBonus ? 'Secret Cake Unlocked!' : 'Bonus Round Complete!')
+          : 'Level Complete!';
+      roundBadge.textContent = cfg.badge;
+
+      let extraReport = '';
+      if(currentLevel === 5){
+        extraReport = `<br><br><strong>Bonus Round 6 is next.</strong><br>Get all 5 correct to unlock the secret 5 tiered cake.`;
+      }
+      if(perfectBonus){
+        extraReport = `<br><br><strong>🎉 Congratulations, ${getPlayerName()}! 🎉</strong><br>You unlocked the secret 5 tiered cake!${secretCakeRewardHTML()}`;
+      }else if(currentLevel === 6){
+        extraReport = `<br><br><strong>Bonus goal:</strong> Get all 5 correct to unlock the secret 5 tiered cake.`;
+      }
+
+      roundReport.innerHTML = `
+        <strong>${cfg.name}</strong><br>
+        Level score: ${currentRoundScore}/${currentQuestions.length}<br>
+        Total score: ${totalScore}/${totalMaxScore}
+        ${extraReport}
+      `;
+
+      if(currentLevel === 5){
+        roundLine.textContent = 'Great work! There will be a bonus secret cake for the 6th round.';
+      }else if(perfectBonus){
+        roundLine.textContent = 'Amazing work! You unlocked the secret 5 tiered cake!';
+      }else if(currentLevel === 6){
+        roundLine.textContent = 'You finished the bonus round. Try again for the secret 5 tiered cake!';
+      }else{
+        roundLine.textContent = 'Great work! Ready for the next level?';
+      }
+
+      if(currentLevel < 6){
+        roundActions.innerHTML = `<button class="game-btn btn-check" id="modalNextBtn" type="button">${currentLevel === 5 ? '🎂 Bonus Round 6' : '➡ Next Level'}</button>`;
+      }else{
+        roundActions.innerHTML = `
+          <button class="game-btn btn-check" id="modalFinishBtn" type="button">🏁 Finish</button>
+          <button class="game-btn btn-clear" id="modalRestartBtn" type="button">🔁 Play Again</button>
+        `;
+      }
+
+      showModal(roundModal);
+      wireRoundButtons();
+      setBestScore(totalScore);
+    }
+
+    function wireRoundButtons(){
+      const modalNextBtn = document.getElementById('modalNextBtn');
+      const modalFinishBtn = document.getElementById('modalFinishBtn');
+      const modalRestartBtn = document.getElementById('modalRestartBtn');
+
+      if(modalNextBtn){
+        modalNextBtn.addEventListener('click', ()=>{
+          hideModal(roundModal);
+          startLevel(currentLevel + 1);
+        });
+      }
+      if(modalFinishBtn){
+        modalFinishBtn.addEventListener('click', ()=>{
+          hideModal(roundModal);
+          finishGame();
+        });
+      }
+      if(modalRestartBtn){
+        modalRestartBtn.addEventListener('click', ()=>{
+          hideModal(roundModal);
+          resetGame();
+        });
+      }
+    }
+
+    function finishGame(){
+      stopSpeaking();
+      currentQuestion = null;
+      questionResolved = true;
+      stageState = 'good';
+      updateTop();
+      syncButtons();
+      setStep(3);
+      feedback.className = 'feedback good';
+      feedback.innerHTML = secretCakeUnlocked
+        ? `🏁 Game finished! Total score: <strong>${totalScore}/${totalMaxScore}</strong>.<br><strong>🎉 You unlocked the secret 5 tiered cake! 🎉</strong>`
+        : `🏁 Game finished! Total score: <strong>${totalScore}/${totalMaxScore}</strong>.`;
+      setSellerArt('good');
+      sellerSpeech.className = 'speech good';
+      sellerSpeech.innerHTML = secretCakeUnlocked
+        ? `<strong>Congratulations, ${getPlayerName()}!</strong><br>You unlocked the secret 5 tiered cake by clearing all 5 bonus questions!`
+        : `<strong>Excellent work, ${getPlayerName()}!</strong><br>You helped every customer at Sweet Cake Shop.`;
+      setBestScore(totalScore);
+    }
+
+    function resetGame(){
+      totalScore = 0;
+      secretCakeUnlocked = false;
+      currentLevel = 1;
+      startLevel(1);
+      setBestScore(getBestScore());
+    }
+
+    function startLevel(level){
+      stopSpeaking();
+      currentLevel = level;
+      currentQuestions = buildLevelQuestions(level);
+      currentQuestionIndex = 0;
+      currentRoundScore = 0;
+      currentQuestion = null;
+      questionResolved = false;
+      selectedAnswer = null;
+      stageState = 'idle';
+
+      const cfg = getCurrentLevelConfig();
+      introTitle.textContent = cfg.name;
+      introBadge.textContent = cfg.badge;
+      introMission.textContent = cfg.mission;
+      introDetails.innerHTML = cfg.details + (level === 6 ? '<br><br><strong>Bonus secret cake:</strong> Get all 5 correct to unlock the secret 5 tiered cake.' : '');
+
+      renderTickets();
+      updateTop();
+      hideReasoning();
+      updateChosenAnswer();
+      setSellerReady();
+      setStep(1);
+      showModal(introModal);
+    }
+
+    function startGame(){
+      if(soundOn && audioOpeningMusic && audioOpeningMusic.dataset.failed !== '1'){
+        try{
+          audioOpeningMusic.volume = 0.22;
+          const restoreVolume = ()=>{
+            try{ audioOpeningMusic.volume = 1; }catch(err){}
+          };
+          setTimeout(restoreVolume, 1200);
+        }catch(err){}
+      }
+      playAssetSound(audioOpeningSound, fallbackTap);
+      setPlayerName(coverNameInput.value);
+      coverScreen.classList.add('hidden');
+      app.classList.add('show');
+      totalScore = 0;
+      secretCakeUnlocked = false;
+      startLevel(1);
+    }
+
+    function launchConfetti(){
+      confettiLayer.innerHTML = '';
+      const colors = ['#ff8fbd','#7ed4ff','#ffd166','#8de49a','#c4a8ff'];
+      for(let i = 0; i < 20; i++){
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = (Math.random() * 100) + 'vw';
+        piece.style.width = (6 + Math.random() * 8) + 'px';
+        piece.style.height = (10 + Math.random() * 10) + 'px';
+        piece.style.background = colors[i % colors.length];
+        piece.style.animationDuration = (1.15 + Math.random() * 1.15) + 's';
+        confettiLayer.appendChild(piece);
+      }
+      setTimeout(()=>{ confettiLayer.innerHTML = ''; }, 1800);
+    }
+
+    setAudioSource(audioOpeningMusic, ['opening_music.mp3','opening_music']);
+    setAudioSource(audioOpeningSound, ['opening_sound.mp3','opening_sound']);
+    setAudioSource(audioOrderBell, ['sfx_order_bell.mp3','sfx_order_bell']);
+    setAudioSource(audioCorrect, ['correct_chime.mp3','correct_chime','correct.mp3']);
+    setAudioSource(audioWrong, ['wrong_bloop.mp3','wrong_bloop','wrong.mp3']);
+    setAudioSource(audioTada, ['level_tada.mp3','level_tada','tada.mp3']);
+
+    loadSpeechVoices();
+    if('speechSynthesis' in window){
+      window.speechSynthesis.onvoiceschanged = loadSpeechVoices;
+    }
+
+    coverScreen.addEventListener('pointerdown', ()=>{
+      if(!coverScreen.classList.contains('hidden')) startOpeningMusic();
+    }, { once:true });
+    coverNameInput.addEventListener('focus', ()=>{
+      if(!coverScreen.classList.contains('hidden')) startOpeningMusic();
+    }, { once:true });
+    coverStartBtn.addEventListener('click', startGame);
+    coverNameInput.addEventListener('keydown', e=>{
+      if(e.key === 'Enter') startGame();
+    });
+
+    startLevelBtn.addEventListener('click', ()=>{
+      stopOpeningMusic();
+      stopAllAudio();
+      hideModal(introModal);
+      loadQuestion();
+    });
+
+    checkBtn.addEventListener('click', checkAnswer);
+    hintBtn.addEventListener('click', showHint);
+    clearBtn.addEventListener('click', clearAnswer);
+    nextBtn.addEventListener('click', nextOrder);
+
+    backBtn.addEventListener('click', ()=>{
+      if(currentStep > 1) setStep(currentStep - 1);
+      if(currentStep - 1 === 1 && !questionResolved) speakCurrentQuestion();
+    });
+
+    forwardBtn.addEventListener('click', ()=>{
+      if(currentStep === 1){
+        setStep(2);
+        return;
+      }
+      if(currentStep === 2){
+        if(questionResolved) setStep(3);
+        else feedback.textContent = 'Choose an answer and press Check first.';
+        return;
+      }
+      if(questionResolved) nextOrder();
+      else{
+        setStep(1);
+        speakCurrentQuestion();
+      }
+    });
+
+    infoBtn.addEventListener('click', ()=>{
+      stopSpeaking();
+      showModal(infoModal);
+    });
+    closeInfoBtn.addEventListener('click', ()=>hideModal(infoModal));
+
+    changeUserBtn.addEventListener('click', ()=>{
+      playerNameInput.value = getPlayerName();
+      stopSpeaking();
+      showModal(nameModal);
+    });
+
+    saveNameBtn.addEventListener('click', ()=>{
+      setPlayerName(playerNameInput.value);
+      hideModal(nameModal);
+      feedback.textContent = 'Baker changed to ' + getPlayerName() + '.';
+    });
+
+    soundToggleBtn.addEventListener('click', ()=>{
+      soundOn = !soundOn;
+      soundToggleBtn.textContent = soundOn ? '🔊' : '🔇';
+      if(!soundOn){
+        stopAllAudio();
+        stopSpeaking();
+      }else{
+        fallbackTap();
+        if(!coverScreen.classList.contains('hidden')) startOpeningMusic();
+      }
+    });
+       
+
+    setPlayerName(getPlayerName());
+    bestScoreText.textContent = String(getBestScore());
+    maxScoreText.textContent = String(totalMaxScore);
+    updateChosenAnswer();
+    hideReasoning();
+    setCustomerArt();
+    setSellerReady();
+    feedback.textContent = 'Welcome to Sweet Cake Shop!';
+  </script>
+</body>
+</html>
