@@ -1752,13 +1752,10 @@
     const coverStartBtn = document.getElementById('coverStartBtn');
     const app = document.getElementById('app');
 
-    const playerNameText = document.getElementById('playerNameText');
     const levelText = document.getElementById('levelText');
     const qNumText = document.getElementById('qNumText');
     const qTotalText = document.getElementById('qTotalText');
     const roundScoreText = document.getElementById('roundScoreText');
-    const totalScoreText = document.getElementById('totalScoreText');
-    const goalText = document.getElementById('goalText');
     const ticketsRow = document.getElementById('ticketsRow');
     const progressFill = document.getElementById('progressFill');
 
@@ -2174,7 +2171,6 @@
     function setPlayerName(name){
       const finalName = String(name || '').trim().replace(/\s+/g,' ').slice(0,20) || 'Baker';
       safeStore.set(STORE_NAME, finalName);
-      playerNameText.textContent = finalName;
       coverNameInput.value = finalName;
       playerNameInput.value = finalName;
     }
@@ -2688,8 +2684,6 @@
       qNumText.textContent = String(currentQuestion ? currentQuestionNumber() : 1);
       qTotalText.textContent = String(currentQuestions.length || 4);
       roundScoreText.textContent = String(currentRoundScore);
-      totalScoreText.textContent = String(totalScore);
-      goalText.textContent = cfg.goal;
       missionLine.textContent = cfg.mission;
       const done = currentQuestion ? (questionResolved ? currentQuestionNumber() : currentQuestionNumber() - 1) : 0;
       progressFill.style.width = ((done / Math.max(currentQuestions.length,1)) * 100) + '%';
