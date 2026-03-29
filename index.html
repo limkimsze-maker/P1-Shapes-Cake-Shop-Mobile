@@ -189,16 +189,8 @@
       font-weight:900;
       line-height:1.05;
     }
-    .status-box > span{
-  display:block;
-  font-size:11px;
-  margin-top:1px;
-}
+    .status-box span{display:block;font-size:11px;margin-top:1px;}
 
-#qNumText,
-#qTotalText{
-  display:inline;
-}
     .tickets-wrap,.progress-wrap{padding:5px 8px;}
     .section-label{text-align:center;font-size:10px;font-weight:900;margin-bottom:3px;}
     .tickets{
@@ -1400,6 +1392,127 @@
   }
 }
 
+
+
+/* ===== extra compact top strip ===== */
+.topbar{
+  padding:3px 4px;
+}
+.title{
+  font-size:clamp(.84rem,3.3vw,.98rem);
+  line-height:1;
+}
+.subtitle{
+  display:none;
+}
+.top-actions{
+  gap:3px;
+}
+.pill-btn{
+  width:30px;
+  height:28px;
+  font-size:14px;
+  border-width:2px;
+}
+.status-grid{
+  margin-top:3px;
+  gap:2px;
+}
+.status-box{
+  padding:1px;
+  font-size:0;
+  line-height:1;
+  min-height:26px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-width:2px;
+  border-radius:8px;
+}
+.status-box > span{
+  display:block;
+  font-size:10px;
+  margin-top:0;
+  line-height:1;
+}
+#qNumText,
+#qTotalText{
+  display:inline;
+}
+.progress-wrap{
+  padding:3px 6px;
+}
+.section-label{
+  font-size:8px;
+  margin-bottom:2px;
+  line-height:1;
+}
+.progress-bar{
+  height:7px;
+  border-width:2px;
+}
+.story-nav{
+  gap:4px;
+}
+.story-pill{
+  font-size:12px;
+  padding:3px 2px;
+  border-width:2px;
+}
+
+@media (max-width:430px){
+  .pill-btn{
+    width:28px;
+    height:26px;
+    font-size:13px;
+  }
+  .status-box{
+    min-height:24px;
+  }
+  .status-box > span{
+    font-size:9px;
+  }
+  .story-pill{
+    font-size:11px;
+    padding:3px 1px;
+  }
+}
+
+@media (max-height:780px) and (pointer:coarse){
+  .topbar{
+    padding:2px 3px;
+  }
+  .pill-btn{
+    width:26px;
+    height:24px;
+    font-size:12px;
+  }
+  .status-grid{
+    margin-top:2px;
+  }
+  .status-box{
+    min-height:22px;
+    padding:1px;
+  }
+  .status-box > span{
+    font-size:8px;
+  }
+  .progress-wrap{
+    padding:2px 5px;
+  }
+  .section-label{
+    font-size:7px;
+    margin-bottom:1px;
+  }
+  .progress-bar{
+    height:6px;
+  }
+  .story-pill{
+    font-size:10px;
+    padding:2px 1px;
+  }
+}
+
 </style>
   <script src="https://cdn.counter.dev/script.js" data-id="825e93b6-ce99-40ef-8bcc-125f13297433" data-utcoffset="8"></script>
 </head>
@@ -1443,9 +1556,9 @@
         </div>
       </div>
       <div class="status-grid">
-        <div class="status-box">Level<span id="levelText">1</span></div>
-        <div class="status-box">Question<span><span id="qNumText">1</span>/<span id="qTotalText">4</span></span></div>
-        <div class="status-box">Round Score<span id="roundScoreText">0</span></div>
+        <div class="status-box"><span id="levelText">1</span></div>
+        <div class="status-box"><span><span id="qNumText">1</span>/<span id="qTotalText">4</span></span></div>
+        <div class="status-box"><span id="roundScoreText">0</span></div>
       </div>
     </header>
 
